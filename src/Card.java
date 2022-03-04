@@ -11,5 +11,8 @@ public class Card {
         faceUp = false;
     }
 
+    public String toString() {
+        return value + " of " + suit.toString() + "\n";
+    }
 
 }
