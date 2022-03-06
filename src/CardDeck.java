@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +12,7 @@ public class CardDeck {
     public void populate() throws IOException {
         File file = new File("./resources/cards.txt");
         if (!file.exists())
-            throw new IOException("File 'cards.txt' does not exist.");
+            throw new FileNotFoundException("File 'cards.txt' does not exist.");
 
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine())
