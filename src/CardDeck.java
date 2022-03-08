@@ -12,7 +12,7 @@ public class CardDeck {
     public void populate() throws IOException {
         File file = new File("./resources/cards.txt");
         if (!file.exists())
-            throw new FileNotFoundException("File 'cards.txt' does not exist.");
+            throw new FileNotFoundException("Could not find " + file.getPath());
 
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine())
