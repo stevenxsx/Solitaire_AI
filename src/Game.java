@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 public class Game {
 
     public void startGame() throws Exception {
