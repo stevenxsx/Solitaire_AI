@@ -42,7 +42,7 @@ public class CardDeck {
         };
     }
 
-    private void shuffleDeck() {
+    public void shuffleDeck() {
         Collections.shuffle(deck);
     }
 
