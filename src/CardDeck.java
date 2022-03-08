@@ -18,6 +18,7 @@ public class CardDeck {
         while (scanner.hasNextLine())
             deck.add(new Card(parseSuit(scanner.nextLine()), parseValue(scanner.nextLine())));
 
+        scanner.close();
     }
 
     private Suit parseSuit(String s) {
