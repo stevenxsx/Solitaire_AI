@@ -48,12 +48,13 @@ public class CardDeck {
         Collections.shuffle(deck);
     }
     
-    public ArrayList<Card> DealCards(int numberOfCards) throws NotEnoughCardsException{
+    public ArrayList<Card> dealCards(int numberOfCards) throws NotEnoughCardsException{
         if (this.deck.size() >= numberOfCards){
             ArrayList<Card> dealtCards = new ArrayList<>();
             for (int i = numberOfCards; i != 0; i--){
                 dealtCards.add(this.popCard());
             }
+            dealtCards.get(0).faceCardUp(true);
             return dealtCards;
         } else {
             throw new NotEnoughCardsException("The deck only has" + deck.size() + "cards");
