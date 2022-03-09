@@ -11,7 +11,7 @@ public class Card {
         faceUp = false;
     }
 
-    public void flipCard(){this.faceUp = !faceUp;}
+    public void faceCardUp(boolean up){this.faceUp = up;}
 
     public Suit getSuit(){return this.suit;}
 
