@@ -46,6 +46,16 @@ public class CardDeck {
         Collections.shuffle(deck);
     }
 
+    public Card DealCard() throws DeckEmptyException{
+        if (this.deck.size() != 0) {
+            return this.deck.remove(
+                    this.deck.size()-1
+            );
+        } else {
+            throw new DeckEmptyException();
+        }
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (Card card : deck) {
