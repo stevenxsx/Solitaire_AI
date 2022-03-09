@@ -1,3 +1,5 @@
+import Exceptions.NotEnoughCardsException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,14 +47,16 @@ public class CardDeck {
     public void shuffleDeck() {
         Collections.shuffle(deck);
     }
-
-    public Card DealCard() throws DeckEmptyException{
-        if (this.deck.size() != 0) {
-            return this.deck.remove(
-                    this.deck.size()-1
-            );
+    
+    public ArrayList<Card> DealCards(int numberOfCards) throws NotEnoughCardsException{
+        if (this.deck.size() >= numberOfCards){
+            ArrayList<Card> dealtCards = new ArrayList<>();
+            for (int i = numberOfCards; i != 0; i--){
+                dealtCards.add(this.popCard());
+            }
+            return dealtCards;
         } else {
-            throw new DeckEmptyException();
+            throw new NotEnoughCardsException("The deck only has" + deck.size() + "cards");
         }
     }
 
@@ -64,4 +68,11 @@ public class CardDeck {
         return s.toString();
     }
 
+    private Card popCard() throws NotEnoughCardsException {
+        if (this.deck.size() != 0) {
+            return this.deck.remove(0);
+        } else {
+            throw new NotEnoughCardsException("The deck is empty!");
+        }
+    }
 }
