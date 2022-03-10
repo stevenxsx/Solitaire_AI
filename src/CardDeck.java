@@ -17,9 +17,11 @@ public class CardDeck {
             throw new FileNotFoundException("Could not find " + file.getPath());
 
         Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine())
-            cards.add(new Card(parseSuit(scanner.nextLine()), parseValue(scanner.nextLine())));
-
+        String next;
+        while (scanner.hasNextLine()) {
+            next = scanner.nextLine();
+            cards.add(new Card(parseSuit(next), parseValue(next)));
+        }
         scanner.close();
     }
 
@@ -61,11 +63,13 @@ public class CardDeck {
         }
     }
 
-    public String toString() {
+    public String toString(String deckName) {
         StringBuilder s = new StringBuilder();
+        s.append(deckName).append(" includes the following:\n");
         for (Card card : cards) {
-            s.append(card.toString());
+            s.append(card.toString()).append(" - Face Up -> ").append(card.getFaceUp()).append("\n");
         }
+        s.append("\n");
         return s.toString();
     }
 

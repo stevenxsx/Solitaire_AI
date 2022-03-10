@@ -20,7 +20,7 @@ public class Card {
     public boolean getFaceUp(){return this.faceUp;}
 
     public String toString() {
-        return value + " of " + suit.toString() + "\n";
+        return value + " of " + suit.toString();
     }
 
 }

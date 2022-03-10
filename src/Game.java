@@ -3,16 +3,15 @@ import Exceptions.NotEnoughCardsException;
 import java.util.ArrayList;
 
 public class Game {
-    CardDeck cardDeck;
-    ArrayList<CardPile> piles;
+
 
     public void startGame() throws Exception {
-        cardDeck = new CardDeck();
-        cardDeck.populate();
-        System.out.println(cardDeck);
-        cardDeck.shuffleDeck();
-        System.out.println("|||||||||||||||||||||||||||||||||||||");
-        System.out.println(cardDeck);
+        Board board = new Board();
+        board.initialDeck.populate();
+        board.initialDeck.shuffleDeck();
+        System.out.println("Initial Deck Size = " + board.initialDeck.size());
+        board.initialPopulateBoard();
+        board.printBoard();
 
     }
 

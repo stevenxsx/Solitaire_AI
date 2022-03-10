@@ -30,6 +30,8 @@ public class Board {
         }
     }
 
+    //Allows for referencing all the card decks by string. Useful for using the 7 piles in for loops where 'i'
+    //is equal to the pile you want
     public CardDeck getDeck(String input) throws Exception {
         return switch (input) {
             case "deck" -> initialDeck;
@@ -50,10 +52,12 @@ public class Board {
         };
     }
 
+    //Creates the board using the initial card deck. Make sure the deck is shuffled.
     public void initialPopulateBoard() throws Exception {
         for (int i = 1; i <= 7; i++) {
-            moveCardDeckToDeck(getDeck("deck"), getDeck(Integer.toString(i)),
-                    getDeck("deck").size()-(i),false);
+            //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
+            moveCardDeckToDeck(initialDeck, getDeck(Integer.toString(i)),
+                    initialDeck.size()-(i),false);
             getDeck(Integer.toString(i)).get(i-1).faceCardUp(true);
 
         }
@@ -62,24 +66,28 @@ public class Board {
     public void printBoard() {
         StringBuilder sb = new StringBuilder();
         sb
-                .append(initialDeck.toString())
-                .append(drawDeck.toString())
-                .append(drawDiscard.toString())
-                .append(pile1.toString())
-                .append(pile2.toString())
-                .append(pile3.toString())
-                .append(pile4.toString())
-                .append(pile5.toString())
-                .append(pile6.toString())
-                .append(pile7.toString())
-                .append(heartsPile.toString())
-                .append(spadesPile.toString())
-                .append(diamondsPile.toString())
-                .append(clubsPile.toString());
+                .append(initialDeck.toString("Initial"))
+                .append(drawDeck.toString("Draw"))
+                .append(drawDiscard.toString("Discard"))
+                .append(pile1.toString("Pile1"))
+                .append(pile2.toString("Pile2"))
+                .append(pile3.toString("Pile"))
+                .append(pile4.toString("Pile4"))
+                .append(pile5.toString("Pile5"))
+                .append(pile6.toString("Pile6"))
+                .append(pile7.toString("Pile7"))
+                .append(heartsPile.toString("Hearts"))
+                .append(spadesPile.toString("Spades"))
+                .append(diamondsPile.toString("Diamonds"))
+                .append(clubsPile.toString("Clubs"));
         System.out.println(sb);
+
+        // Create new super print method with formatting
+
 
     }
 
+    //Superfluous method?
     /*public String toString(ArrayList<Card> deck) {
         StringBuilder sb = new StringBuilder();
         for (Card c:deck
