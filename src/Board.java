@@ -1,29 +1,27 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board {
 
     //All board operations and card movement go in this class.
 
-    ArrayList<Card> initialDeck = new ArrayList<>(); //id = "deck"
-    ArrayList<Card> drawDeck = new ArrayList<>(); // "draw"
-    ArrayList<Card> drawDiscard = new ArrayList<>(); // "discard"
-    ArrayList<Card> pile1 = new ArrayList<>(); // "1"
-    ArrayList<Card> pile2 = new ArrayList<>(); // "2"
-    ArrayList<Card> pile3 = new ArrayList<>(); // "3"
-    ArrayList<Card> pile4 = new ArrayList<>(); // "4"
-    ArrayList<Card> pile5 = new ArrayList<>(); // "5"
-    ArrayList<Card> pile6 = new ArrayList<>(); // "6"
-    ArrayList<Card> pile7 = new ArrayList<>(); // "7"
-    ArrayList<Card> heartsPile = new ArrayList<>(); // "hearts"
-    ArrayList<Card> spadesPile = new ArrayList<>(); // "spades"
-    ArrayList<Card> diamondsPile = new ArrayList<>(); // "diamonds"
-    ArrayList<Card> clubsPile = new ArrayList<>(); // "clubs"
+    CardDeck initialDeck = new CardDeck(); //id = "deck"
+    CardDeck drawDeck = new CardDeck(); // "draw"
+    CardDeck drawDiscard = new CardDeck(); // "discard"
+    CardDeck pile1 = new CardDeck(); // "1"
+    CardDeck pile2 = new CardDeck(); // "2"
+    CardDeck pile3 = new CardDeck(); // "3"
+    CardDeck pile4 = new CardDeck(); // "4"
+    CardDeck pile5 = new CardDeck(); // "5"
+    CardDeck pile6 = new CardDeck(); // "6"
+    CardDeck pile7 = new CardDeck(); // "7"
+    CardDeck heartsPile = new CardDeck(); // "hearts"
+    CardDeck spadesPile = new CardDeck(); // "spades"
+    CardDeck diamondsPile = new CardDeck(); // "diamonds"
+    CardDeck clubsPile = new CardDeck(); // "clubs"
 
-    public Board(CardDeck deck) {
-        initialDeck = deck.getDeck();
-    }
 
-    public void moveCardDeckToDeck(ArrayList<Card> deck1, ArrayList<Card> deck2, int index,boolean flipFaceUp) {
+    public void moveCardDeckToDeck(CardDeck deck1, CardDeck deck2, int index,boolean flipFaceUp) {
 
         //forced move -> no check to see if its legal
         while (deck1.size() > index) {
@@ -32,7 +30,7 @@ public class Board {
         }
     }
 
-    public ArrayList<Card> getDeck(String input) throws Exception {
+    public CardDeck getDeck(String input) throws Exception {
         return switch (input) {
             case "deck" -> initialDeck;
             case "draw" -> drawDeck;
@@ -56,37 +54,38 @@ public class Board {
         for (int i = 1; i <= 7; i++) {
             moveCardDeckToDeck(getDeck("deck"), getDeck(Integer.toString(i)),
                     getDeck("deck").size()-(i),false);
-            getDeck(Integer.toString(i)).get(i-1).setFaceUp(true);
+            getDeck(Integer.toString(i)).get(i-1).faceCardUp(true);
 
         }
     }
 
     public void printBoard() {
         StringBuilder sb = new StringBuilder();
-        sb.append(toString(initialDeck))
-                .append(drawDeck)
-                .append(drawDiscard)
-                .append(pile1)
-                .append(pile2)
-                .append(pile3)
-                .append(pile4)
-                .append(pile5)
-                .append(pile6)
-                .append(pile7)
-                .append(heartsPile)
-                .append(spadesPile)
-                .append(diamondsPile)
-                .append(clubsPile);
+        sb
+                .append(initialDeck.toString())
+                .append(drawDeck.toString())
+                .append(drawDiscard.toString())
+                .append(pile1.toString())
+                .append(pile2.toString())
+                .append(pile3.toString())
+                .append(pile4.toString())
+                .append(pile5.toString())
+                .append(pile6.toString())
+                .append(pile7.toString())
+                .append(heartsPile.toString())
+                .append(spadesPile.toString())
+                .append(diamondsPile.toString())
+                .append(clubsPile.toString());
         System.out.println(sb);
 
     }
 
-    public String toString(ArrayList<Card> deck) {
+    /*public String toString(ArrayList<Card> deck) {
         StringBuilder sb = new StringBuilder();
         for (Card c:deck
              ) {
             sb.append(c.toString());
         }
         return sb.toString();
-    }
+    }*/
 }

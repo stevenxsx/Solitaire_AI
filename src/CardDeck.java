@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class CardDeck {
 
-    private final ArrayList<Card> deck = new ArrayList<>(52);
+    private final ArrayList<Card> cards = new ArrayList<>(52);
 
     public void populate() throws IOException {
         File file = new File("./resources/cards.txt");
@@ -18,7 +18,7 @@ public class CardDeck {
 
         Scanner scanner = new Scanner(file);
         while (scanner.hasNextLine())
-            deck.add(new Card(parseSuit(scanner.nextLine()), parseValue(scanner.nextLine())));
+            cards.add(new Card(parseSuit(scanner.nextLine()), parseValue(scanner.nextLine())));
 
         scanner.close();
     }
@@ -45,11 +45,11 @@ public class CardDeck {
     }
 
     public void shuffleDeck() {
-        Collections.shuffle(deck);
+        Collections.shuffle(cards);
     }
     
     public ArrayList<Card> dealCards(int numberOfCards) throws NotEnoughCardsException{
-        if (this.deck.size() >= numberOfCards){
+        if (this.cards.size() >= numberOfCards){
             ArrayList<Card> dealtCards = new ArrayList<>();
             for (int i = numberOfCards; i != 0; i--){
                 dealtCards.add(this.popCard());
@@ -57,23 +57,39 @@ public class CardDeck {
             dealtCards.get(0).faceCardUp(true);
             return dealtCards;
         } else {
-            throw new NotEnoughCardsException("The deck only has" + deck.size() + "cards");
+            throw new NotEnoughCardsException("The deck only has" + cards.size() + "cards");
         }
     }
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (Card card : deck) {
+        for (Card card : cards) {
             s.append(card.toString());
         }
         return s.toString();
     }
 
     private Card popCard() throws NotEnoughCardsException {
-        if (this.deck.size() != 0) {
-            return this.deck.remove(0);
+        if (this.cards.size() != 0) {
+            return this.cards.remove(0);
         } else {
             throw new NotEnoughCardsException("The deck is empty!");
         }
+    }
+
+    public int size() {
+        return cards.size();
+    }
+
+    public Card get(int index) {
+        return cards.get(index);
+    }
+
+    public void add(Card card) {
+        cards.add(card);
+    }
+
+    public void remove(int index) {
+        cards.remove(index);
     }
 }

@@ -14,10 +14,9 @@ public class Game {
         System.out.println("|||||||||||||||||||||||||||||||||||||");
         System.out.println(cardDeck);
 
-        this.dealCards(7);
     }
 
-    private void dealCards(int piles) {
+    /*private void dealCards(int piles) {
         this.piles = new ArrayList<>(piles);
         for (int i = 1; i <= piles; i++){
             try {
@@ -28,5 +27,5 @@ public class Game {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }
