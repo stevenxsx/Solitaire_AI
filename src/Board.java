@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
-
 public class Board {
 
     //All board operations and card movement go in this class.
@@ -20,7 +17,7 @@ public class Board {
     CardDeck diamondsPile = new CardDeck(); // "diamonds"
     CardDeck clubsPile = new CardDeck(); // "clubs"
 
-    public boolean checkMoveLegality(Card source, Card destination) {
+    public boolean canMoveToNumberPile(Card source, Card destination) {
         boolean value = false;
         boolean suit = false;
         if (destination.getValue() - source.getValue() == 1) {

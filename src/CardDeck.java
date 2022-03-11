@@ -56,7 +56,7 @@ public class CardDeck {
             for (int i = numberOfCards; i != 0; i--){
                 dealtCards.add(this.popCard());
             }
-            dealtCards.get(0).faceCardUp(true);
+            dealtCards.get(this.cards.size()-1).faceCardUp(true);
             return dealtCards;
         } else {
             throw new NotEnoughCardsException("The deck only has" + cards.size() + "cards");
@@ -75,7 +75,7 @@ public class CardDeck {
 
     private Card popCard() throws NotEnoughCardsException {
         if (this.cards.size() != 0) {
-            return this.cards.remove(0);
+            return this.cards.remove(this.cards.size()-1);
         } else {
             throw new NotEnoughCardsException("The deck is empty!");
         }
