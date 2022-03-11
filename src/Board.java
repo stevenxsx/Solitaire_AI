@@ -20,6 +20,44 @@ public class Board {
     CardDeck diamondsPile = new CardDeck(); // "diamonds"
     CardDeck clubsPile = new CardDeck(); // "clubs"
 
+    public boolean checkMoveLegality(Card source, Card destination) {
+        boolean value = false;
+        boolean suit = false;
+        if (destination.getValue() - source.getValue() == 1) {
+            value = true;
+        }
+        if ((source.isRed() && destination.isBlack()) || (source.isBlack() && source.isRed())) {
+            suit = true;
+        } {
+
+        }
+        return (value && suit);
+    }
+
+    public boolean canMoveToFoundation(CardDeck source, CardDeck destination, int index) {
+        boolean legalIndex = false;
+        Suit suit = source.get(index).getSuit();
+        boolean matchingSuit = false;
+        boolean matchingValue = false;
+
+        if (source.size()-1 == index) {legalIndex = true;}
+        if ((suit == Suit.HEARTS && destination == heartsPile)
+        || (suit == Suit.SPADES && destination == spadesPile)
+        || (suit == Suit.DIAMONDS && destination == diamondsPile)
+        || (suit == Suit.CLUBS && destination == clubsPile))
+        {matchingSuit = true;        }
+        if (destination.size() > 0) {
+            if (source.get(index).getValue() - destination.get(destination.size()-1).getValue() == 1) {
+                matchingValue = true;
+            }
+        }
+        else if (destination.size() == 0) {
+            if (source.get(index).getValue() == 1) {
+                matchingValue = true;
+            }
+        }
+        return (legalIndex && matchingSuit && matchingValue);
+    }
 
     public void moveCardDeckToDeck(CardDeck deck1, CardDeck deck2, int index,boolean flipFaceUp) {
 
@@ -61,6 +99,7 @@ public class Board {
             getDeck(Integer.toString(i)).get(i-1).faceCardUp(true);
 
         }
+        moveCardDeckToDeck(initialDeck,drawDeck, 0,false);
     }
 
     public void printBoard() {
