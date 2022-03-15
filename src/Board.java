@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
-
 public class Board {
 
     //All board operations and card movement go in this class.
@@ -20,6 +17,70 @@ public class Board {
     CardDeck diamondsPile = new CardDeck(); // "diamonds"
     CardDeck clubsPile = new CardDeck(); // "clubs"
 
+    public boolean canMoveToNumberPile(Card source, Card destination) {
+        boolean value = false;
+        boolean suit = false;
+        if (destination.getValue() - source.getValue() == 1) {
+            value = true;
+        }
+        if ((source.isRed() && destination.isBlack()) || (source.isBlack() && source.isRed())) {
+            suit = true;
+        } {
+
+        }
+        return (value && suit);
+    }
+    /* AI functions
+     All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
+     Search for Ace in number piles and move to foundation
+     Search for Deuce in number piles and move to foundation
+     Search for transferable face-up card(s) that will free a face-down card
+         If search returns multiple options select pile with most face-down cards
+     Search for transferable face-up card(s) that will clear a space
+        IF yes is a king playable?
+            IF yes can playing the king free up a downcard? (i.e. allow transfer of a queen)
+            ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
+                IF yes play then transfer card
+                THEN play king
+     Search for any card that can be transfered to an Ace-stack
+         Vet candidates
+             Keep candidate
+                 IF its same color twin is on the board (e.g. keep 3D if 3H is in play)
+                 OR if it's not-same color successors are on the board (e.g. keep 3D if both 2C & 2S are in play)
+                     AND the play will free a downcard
+                     Nice to have smarty pants AI option: OR if the subsequent play will free a downcard
+                     OR it will clear a spot for a waiting king (remember to call "should I clear a space?" function)
+     Search for a pile that can be smoothed
+        EITHER a top card or a group of cards that can be transfered to make a pile smooth
+    Search for cards that can be played from the Deck then play them
+    Another nice to have smarty pants AI option: Try to transfer cards/piles to open up playing cards from the dack
+    IF no plays can be made, flip the table and rage quit!
+    */
+
+    public boolean canMoveToFoundation(CardDeck source, CardDeck destination, int index) {
+        boolean legalIndex = false;
+        Suit suit = source.get(index).getSuit();
+        boolean matchingSuit = false;
+        boolean matchingValue = false;
+
+        if (source.size()-1 == index) {legalIndex = true;}
+        if ((suit == Suit.HEARTS && destination == heartsPile)
+        || (suit == Suit.SPADES && destination == spadesPile)
+        || (suit == Suit.DIAMONDS && destination == diamondsPile)
+        || (suit == Suit.CLUBS && destination == clubsPile))
+        {matchingSuit = true;        }
+        if (destination.size() > 0) {
+            if (source.get(index).getValue() - destination.get(destination.size()-1).getValue() == 1) {
+                matchingValue = true;
+            }
+        }
+        else if (destination.size() == 0) {
+            if (source.get(index).getValue() == 1) {
+                matchingValue = true;
+            }
+        }
+        return (legalIndex && matchingSuit && matchingValue);
+    }
 
     public void moveCardDeckToDeck(CardDeck deck1, CardDeck deck2, int index,boolean flipFaceUp) {
 
@@ -61,6 +122,7 @@ public class Board {
             getDeck(Integer.toString(i)).get(i-1).faceCardUp(true);
 
         }
+        moveCardDeckToDeck(initialDeck,drawDeck, 0,false);
     }
 
     public void printBoard() {

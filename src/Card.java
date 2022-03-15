@@ -15,6 +15,13 @@ public class Card {
 
     public Suit getSuit(){return this.suit;}
 
+    public boolean isRed() {
+        return (this.suit == Suit.HEARTS || this.suit == Suit.DIAMONDS);
+    }
+    public boolean isBlack() {
+        return (this.suit == Suit.SPADES || this.suit == Suit.CLUBS);
+    }
+
     public int getValue(){return this.value;}
 
     public boolean getFaceUp(){return this.faceUp;}
