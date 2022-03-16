@@ -101,7 +101,7 @@ public class CardDeck {
         return this.cards.size()-1;
     }
 
-    public int getNumberOfFaceDownCards(){
+    public Integer getNumberOfFaceDownCards(){
         int number = 0;
         for (Card card : this.cards){
             if(!card.getFaceUp()){
