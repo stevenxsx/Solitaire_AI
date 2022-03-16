@@ -7,24 +7,23 @@ public class Game {
 
     public void startGame() throws Exception {
         Board board = new Board();
+        AI ai = new AI(board);
         board.initialDeck.populate();
         board.initialDeck.shuffleDeck();
         System.out.println("Initial Deck Size = " + board.initialDeck.size());
         board.initialPopulateBoard();
         board.printBoard();
+        do {
+            ai.executeTurn();
+            if (ai.gameIsWon) {
+                winGame();
+            }
+        } while (!ai.gameIsLost);
 
     }
 
-    /*private void dealCards(int piles) {
-        this.piles = new ArrayList<>(piles);
-        for (int i = 1; i <= piles; i++){
-            try {
-                CardPile pile;
-                pile = new CardPile(this.cardDeck.dealCards(i));
-                this.piles.add(pile);
-            } catch (NotEnoughCardsException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
+    public void winGame() {
+        //you won. good job
+    }
+
 }
