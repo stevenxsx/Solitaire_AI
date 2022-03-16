@@ -30,6 +30,7 @@ public class Board {
         }
         return (value && suit);
     }
+
     /** AI functions
      All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
      SIMON -- Search for Ace in number piles and move to foundation
@@ -102,12 +103,12 @@ public class Board {
         return (legalIndex && matchingSuit && matchingValue);
     }
 
-    public void moveCardDeckToDeck(CardDeck deck1, CardDeck deck2, int index,boolean flipFaceUp) {
+    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index,boolean flipFaceUp) {
 
         //forced move -> no check to see if its legal
-        while (deck1.size() > index) {
-            deck2.add(deck1.get(index));
-            deck1.remove(index);
+        while (source.size() > index) {
+            destination.add(source.get(index));
+            source.remove(index);
         }
     }
 
