@@ -14,8 +14,8 @@ public class AI {
     public void executeTurn() {
 
         //needs to break the sequence if a move is executed. check between every type of move.
+        // Search for Aces in number piles and move best candidate to foundation
         scanForMoveType1();
-        validateCandidates1();
         executeBestCandidate();
 
         scanForMoveType2();
@@ -73,7 +73,28 @@ public class AI {
     }
 
     private void scanForMoveType1() {
-
+        ArrayList<Move> candidates = new ArrayList<>();
+        for(int i = 1; i <= 7; i++){
+            try {
+                CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+                int topCardIndex = sourceDeck.size()-1; // Move this function to Deck. Also create a number of facedown cards function
+                Card topCard = sourceDeck.get(topCardIndex);
+                if ( topCard.getValue() == 1){
+                    CardDeck destinationDeck;
+                    switch (topCard.getSuit()){
+                        case HEARTS -> destinationDeck = this.board.getDeck("heartsPile");
+                        case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
+                        case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
+                        case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
+                        default -> destinationDeck = sourceDeck;
+                    }
+                    candidates.add((new Move(sourceDeck, destinationDeck, topCardIndex)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
+            }
+            validateCandidates1(candidates);
+        }
     }
     private void scanForMoveType2() {
 
@@ -100,7 +121,7 @@ public class AI {
 
     }
 
-    public void validateCandidates1() {
+    public void validateCandidates1(ArrayList<Move> candidates) {
 
     }
     public void validateCandidates2() {
