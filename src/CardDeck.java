@@ -100,4 +100,14 @@ public class CardDeck {
     public int getTopCardIndex() {
         return this.cards.size()-1;
     }
+
+    public int getNumberOfFaceDownCards(){
+        int number = 0;
+        for (Card card : this.cards){
+            if(!card.getFaceUp()){
+                number++;
+            }
+        }
+        return number;
+    }
 }
