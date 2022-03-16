@@ -93,12 +93,10 @@ public class CardDeck {
         cards.add(card);
     }
 
-    public void remove(int index) {
-        cards.remove(index);
+    public void remove(int index) { cards.remove(index);
     }
 
-    public int getTopCardIndex() {
-        return this.cards.size()-1;
+    public int getTopCardIndex() { return this.cards.size()-1;
     }
 
     public Integer getNumberOfFaceDownCards(){

@@ -13,12 +13,12 @@ public class Game {
         System.out.println("Initial Deck Size = " + board.initialDeck.size());
         board.initialPopulateBoard();
         board.printBoard();
-        do {
+        /*do {
             ai.executeTurn();
             if (ai.gameIsWon) {
                 winGame();
             }
-        } while (!ai.gameIsLost);
+        } while (!ai.gameIsLost);*/
 
     }
 
