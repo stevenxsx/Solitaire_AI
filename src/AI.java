@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class AI {
     public ArrayList<Move> movesList;
@@ -16,7 +17,6 @@ public class AI {
         //needs to break the sequence if a move is executed. check between every type of move.
         // Search for Aces in number piles and move best candidate to foundation
         scanForMoveType1();
-        executeBestCandidate();
 
         scanForMoveType2();
         validateCandidates2();
@@ -93,7 +93,8 @@ public class AI {
             } catch (Exception e) {
                 e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
             }
-            validateCandidates1(candidates);
+            Move bestCandidate = validateCandidates1(candidates);
+            // executeBestCandidate(bestCandidate); Uncomment when function parameters are refactored.
         }
     }
     private void scanForMoveType2() {
@@ -121,8 +122,10 @@ public class AI {
 
     }
 
-    public void validateCandidates1(ArrayList<Move> candidates) {
-
+    public Move validateCandidates1(ArrayList<Move> candidates) {
+        candidates.sort(Comparator.comparing(c -> c.getSourceDeck().getNumberOfFaceDownCards())
+        );
+        return candidates.get(candidates.size()-1);
     }
     public void validateCandidates2() {
 
