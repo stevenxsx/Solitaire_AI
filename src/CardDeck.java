@@ -96,4 +96,8 @@ public class CardDeck {
     public void remove(int index) {
         cards.remove(index);
     }
+
+    public int getTopCardIndex() {
+        return this.cards.size()-1;
+    }
 }
