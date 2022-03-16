@@ -77,7 +77,7 @@ public class AI {
         for(int i = 1; i <= 7; i++){
             try {
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-                int topCardIndex = sourceDeck.getTopCardIndex(); // Move this function to Deck. Also create a number of facedown cards function
+                int topCardIndex = sourceDeck.getTopCardIndex();
                 Card topCard = sourceDeck.get(topCardIndex);
                 if ( topCard.getValue() == 1){
                     CardDeck destinationDeck;
