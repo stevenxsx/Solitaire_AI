@@ -30,7 +30,7 @@ public class Board {
         }
         return (value && suit);
     }
-    /* AI functions
+    /** AI functions
      All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
      Search for Ace in number piles and move to foundation
      Search for Deuce in number piles and move to foundation
@@ -55,7 +55,27 @@ public class Board {
     Search for cards that can be played from the Deck then play them
     Another nice to have smarty pants AI option: Try to transfer cards/piles to open up playing cards from the dack
     IF no plays can be made, flip the table and rage quit!
-    */
+
+    In a given turn, the AI will for every type of move in the hierarchy scan the whole board for moves of that type.
+     If a move or more are found, they will be added to a 'candidate list' that will be processed after all moves of
+     that type have been found, with the process eliminating the sub-optimal moves in favor of the best one. If no
+     moves of a given type were found, the algorithm will proceed to the next type of move. The hierarchy should
+     therefore include a scan-type function and validation-type function for every type of move. Lastly, some function
+     should be created to handle no possible moves, ending game, etc.
+
+     ExecuteTurn()
+        ScanForMoveType1()
+            AddCandidatesToList(Move object)
+        ValidateCandidates(ListOfMoves)
+            ExecuteBestCandidate(Move)
+        call ScanForMoveType2()
+
+     repeat sequence for moveTypes all the way down
+
+     NoMovesFound()
+        EndGame()
+
+    **/
 
     public boolean canMoveToFoundation(CardDeck source, CardDeck destination, int index) {
         boolean legalIndex = false;
