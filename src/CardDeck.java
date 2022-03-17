@@ -120,7 +120,7 @@ public class CardDeck {
     }
 
     // Call this function to check if popping the topcard will free a downcard
-    public boolean canFreeCard(){
+    public boolean canFreeDownCard(){
         return !this.cards.get(getTopCardIndex()-1).getFaceUp();
     }
 }
