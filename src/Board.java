@@ -34,7 +34,7 @@ public class Board {
     /** AI functions
      All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
      SIMON -- Search for Ace in number piles and move to foundation
-     Search for Deuce in number piles and move to foundation
+     SIMON -- Search for Deuce in number piles and move to foundation
      Search for transferable face-up card(s) that will free a face-down card
          If search returns multiple options select pile with most face-down cards
      Search for transferable face-up card(s) that will clear a space
