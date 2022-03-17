@@ -18,8 +18,6 @@ public class AI {
         scanForMoveType1();
 
         scanForMoveType2();
-        validateCandidates2();
-        executeBestCandidate();
 
         scanForMoveType3();
         validateCandidates3();
@@ -73,38 +71,88 @@ public class AI {
 
     // Search for Aces in number piles and move best candidate to foundation
     private void scanForMoveType1() {
+        // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
+
+        // Scan number piles
         for(int i = 1; i <= 7; i++){
             try {
+                // Number pile variables
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-                int topCardIndex = sourceDeck.getTopCardIndex();
-                Card topCard = sourceDeck.get(topCardIndex);
-                if ( topCard.getValue() == 1){
-                    CardDeck destinationDeck;
-                    switch (topCard.getSuit()){
+                int sourceTopCardIndex = sourceDeck.getTopCardIndex();
+                Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+
+                // Ace pile variables
+                CardDeck destinationDeck;
+                
+                // Identify destionation Ace pile. Only runs if source card is an Ace.
+                // Default is just an empty deck.
+                if ( sourceTopCard.getValue() == 1){
+                    switch (sourceTopCard.getSuit()){
+                        case HEARTS -> destinationDeck = this.board.getDeck("heartsPile");
+                        case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
+                        case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
+                        case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
+                        default -> destinationDeck = new CardDeck();
+                    }
+                    candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
+            }
+        }
+        // Sort candidates, if any, in ascending order
+        if (!candidates.isEmpty()) {
+            candidateSorter(candidates);
+            // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
+        }
+    }
+
+    // Search for Deuces in number piles and move best candidate to foundation
+    private void scanForMoveType2() {
+        // Initialize list of candidate card.
+        ArrayList<Move> candidates = new ArrayList<>();
+
+        // Scan number piles
+        for(int i = 1; i <= 7; i++){
+            try {
+                // Number pile variables
+                CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+                int sourceTopCardIndex = sourceDeck.getTopCardIndex();
+                Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+
+                // Ace pile variables
+                CardDeck destinationDeck;
+                Card ace = new Card(sourceTopCard.getSuit(), 1);
+                int destionationTopCardIndex;
+
+                // Identify destionation Ace pile. Only runs if source card is a deuce.
+                // Default is just so deck is a non-empty, non-ace deck.
+                if ( sourceTopCard.getValue() == 2){
+                    switch (sourceTopCard.getSuit()){
                         case HEARTS -> destinationDeck = this.board.getDeck("heartsPile");
                         case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
                         case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
                         case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
                         default -> destinationDeck = sourceDeck;
                     }
-                    candidates.add((new Move(sourceDeck, destinationDeck, topCardIndex)));
+
+                    // Check if the top card of the destionation pile is an ace, if so add candidate
+                    destionationTopCardIndex = destinationDeck.getTopCardIndex();
+                    if (destinationDeck.isCardValue(destionationTopCardIndex, ace)){
+                        candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
             }
-
-            candidates.sort(
-                    Comparator.comparing(
-                            c -> c.getSourceDeck().getNumberOfFaceDownCards()
-                    )
-            );
-
+        }
+        // Sort candidates, if any, in ascending order
+        if (!candidates.isEmpty()) {
+            candidateSorter(candidates);
+            // Execute best candidate move.
             // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
         }
-    }
-    private void scanForMoveType2() {
-
     }
     private void scanForMoveType3() {
 
@@ -156,7 +204,11 @@ public class AI {
 
     }
 
-
-
-
+    private void candidateSorter(ArrayList<Move> candidates){
+        candidates.sort(
+                Comparator.comparing(
+                        c -> c.getSourceDeck().getNumberOfFaceDownCards()
+                )
+        );
+    }
 }
