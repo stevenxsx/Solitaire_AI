@@ -96,9 +96,12 @@ public class CardDeck {
     public void remove(int index) { cards.remove(index);
     }
 
-    public int getTopCardIndex() { return this.cards.size()-1;
+    //Call this function to recieve the index of the top card in the deck
+    public int getTopCardIndex() {
+        return this.cards.size()-1;
     }
 
+    // Call this function to recieve the number of face down cards in the deck
     public Integer getNumberOfFaceDownCards(){
         int number = 0;
         for (Card card : this.cards){
@@ -109,9 +112,15 @@ public class CardDeck {
         return number;
     }
 
+    // Pass this function the index of a card in the deck to see if it matches the given card
     public boolean isCardValue(int index, Card card){
         Card deckCard = this.cards.get(index);
         return deckCard.getValue() == card.getValue() &&
                 deckCard.getSuit() == card.getSuit();
+    }
+
+    // Call this function to check if popping the topcard will free a downcard
+    public boolean canFreeCard(){
+        return !this.cards.get(getTopCardIndex()-1).getFaceUp();
     }
 }
