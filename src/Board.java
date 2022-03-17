@@ -43,7 +43,7 @@ public class Board {
             ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
                 IF yes play then transfer card
                 THEN play king
-     Search for any card that can be transfered to an Ace-stack
+     SIMON -- Search for any card that can be transfered to an Ace-stack
          Vet candidates
              Keep candidate
                  IF its same color twin is on the board (e.g. keep 3D if 3H is in play)
