@@ -69,6 +69,7 @@ public class Board {
         return false;
     }
 
+    // Check if the index card in the source pile is allowed to be moved to the destination number pile.
     public boolean canMoveToNumberPile(CardDeck source, CardDeck destination, int index) {
         boolean value = false;
         boolean suit = false;
@@ -92,6 +93,7 @@ public class Board {
         return (value && suit && isFaceUp && legalNumberOfCards);
     }
 
+    // Check if the index card in the source pile is allowed to be moved to the destination foundation pile.
     public boolean canMoveToFoundation(CardDeck source, CardDeck destination, int index) {
         boolean legalIndex = false;
         Suit suit = source.get(index).getSuit();
@@ -135,6 +137,7 @@ public class Board {
             destination.get(destination.size()-1).setFaceUp(flipFaceUp);
         }
     }
+
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
         if (source.get(index).isFaceUp() && destination.get(destination.size()-1).isFaceUp()) {
             return true;
