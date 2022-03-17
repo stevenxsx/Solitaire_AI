@@ -11,7 +11,7 @@ public class Card {
         faceUp = false;
     }
 
-    public void faceCardUp(boolean up){this.faceUp = up;}
+    public void setFaceUp(boolean up){this.faceUp = up;}
 
     public Suit getSuit(){return this.suit;}
 
@@ -24,7 +24,7 @@ public class Card {
 
     public int getValue(){return this.value;}
 
-    public boolean getFaceUp(){return this.faceUp;}
+    public boolean isFaceUp(){return this.faceUp;}
 
     public String toString() {
         return value + " of " + suit.toString();
