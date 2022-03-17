@@ -64,12 +64,7 @@ public class AI {
     }
 
     public void executeBestCandidate() {
-        // 1. The function should receive all candidates
-        // 2. The function should iterate through the list starting with the last index
-        // 3. Before continuing the function should call clearDeckOkay(move) and ensure that the move is desirable
-        // 4. If move is desirable execute and terminate iteration
-        // 5. Else continue iteration to next candidate
-        //Feed it one move somehow <- I disagree; see above :)
+        //Feed it one move somehow
     }
 
     // Search for Aces in number piles and move best candidate to foundation
@@ -157,6 +152,7 @@ public class AI {
             // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
         }
     }
+
     // Search for Aces in number piles and move best candidate to foundation
     private void scanForMoveType3() {
 
@@ -218,6 +214,10 @@ public class AI {
     }
 
     private boolean clearDeckOkay(Move move){
+        // 1. The calling function should  iterate through the list of candidates starting with the last index
+        // 2. Before continuing the function should call clearDeckOkay(move) and ensure that the move is desirable
+        // 3. If move is desirable call executeBestCandidate() and terminate iteration
+        // 5. Else continue iteration to next candidate
         return false;
     }
 }
