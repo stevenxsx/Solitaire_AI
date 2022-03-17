@@ -15,7 +15,6 @@ public class AI {
     public void executeTurn() {
 
         //needs to break the sequence if a move is executed. check between every type of move.
-        // Search for Aces in number piles and move best candidate to foundation
         scanForMoveType1();
 
         scanForMoveType2();
@@ -72,6 +71,7 @@ public class AI {
         //Feed it one move somehow
     }
 
+    // Search for Aces in number piles and move best candidate to foundation
     private void scanForMoveType1() {
         ArrayList<Move> candidates = new ArrayList<>();
         for(int i = 1; i <= 7; i++){
@@ -93,8 +93,14 @@ public class AI {
             } catch (Exception e) {
                 e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
             }
-            Move bestCandidate = validateCandidates1(candidates);
-            // executeBestCandidate(bestCandidate); Uncomment when function parameters are refactored.
+
+            candidates.sort(
+                    Comparator.comparing(
+                            c -> c.getSourceDeck().getNumberOfFaceDownCards()
+                    )
+            );
+
+            // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
         }
     }
     private void scanForMoveType2() {
@@ -122,10 +128,8 @@ public class AI {
 
     }
 
-    public Move validateCandidates1(ArrayList<Move> candidates) {
-        candidates.sort(Comparator.comparing(c -> c.getSourceDeck().getNumberOfFaceDownCards())
-        );
-        return candidates.get(candidates.size()-1);
+    public void validateCandidates1() {
+
     }
     public void validateCandidates2() {
 
