@@ -56,7 +56,7 @@ public class CardDeck {
             for (int i = numberOfCards; i != 0; i--){
                 dealtCards.add(this.popCard());
             }
-            dealtCards.get(this.cards.size()-1).faceCardUp(true);
+            dealtCards.get(this.cards.size()-1).setFaceUp(true);
             return dealtCards;
         } else {
             throw new NotEnoughCardsException("The deck only has" + cards.size() + "cards");
@@ -67,7 +67,7 @@ public class CardDeck {
         StringBuilder s = new StringBuilder();
         s.append(deckName).append(" includes the following:\n");
         for (Card card : cards) {
-            s.append(card.toString()).append(" - Face Up -> ").append(card.getFaceUp()).append("\n");
+            s.append(card.toString()).append(" - Face Up -> ").append(card.isFaceUp()).append("\n");
         }
         s.append("\n");
         return s.toString();
@@ -105,7 +105,7 @@ public class CardDeck {
     public Integer getNumberOfFaceDownCards(){
         int number = 0;
         for (Card card : this.cards){
-            if(!card.getFaceUp()){
+            if(!card.isFaceUp()){
                 number++;
             }
         }
@@ -121,6 +121,6 @@ public class CardDeck {
 
     // Call this function to check if popping the topcard will free a downcard
     public boolean canFreeDownCard(){
-        return !this.cards.get(getTopCardIndex()-1).getFaceUp();
+        return !this.cards.get(getTopCardIndex()-1).isFaceUp();
     }
 }
