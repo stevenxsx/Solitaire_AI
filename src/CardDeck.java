@@ -108,4 +108,10 @@ public class CardDeck {
         }
         return number;
     }
+
+    public boolean isCardValue(int index, Card card){
+        Card deckCard = this.cards.get(index);
+        return deckCard.getValue() == card.getValue() &&
+                deckCard.getSuit() == card.getSuit();
+    }
 }
