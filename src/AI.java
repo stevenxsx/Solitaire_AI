@@ -91,7 +91,7 @@ public class AI {
     public void executeBestCandidate() {
         //Feed it one move somehow
     }
-    
+
     // Search for Aces in number piles and move best candidate to foundation
     // Author SIMON
     private void scanForMoveType1() {
@@ -258,7 +258,7 @@ public class AI {
         // If yes transfer card
     }
 
-    //TODO Person currently working:
+    //TODO Person currently working: SIMON
     // Search for transferable face-up card(s) that will clear a space
     private void scanForMoveType4() {
     //        IF yes is a king playable?
