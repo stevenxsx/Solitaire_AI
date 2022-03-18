@@ -143,6 +143,31 @@ public class Board {
         }
     }
 
+    public void FromDeckToDiscard(CardDeck source, CardDeck destination, int index) {
+        int n = 1;
+        if ( source.size() == 0 ){
+            while(destination.size() != 0){
+
+                source.add(destination.get(n));
+                destination.remove(n);
+                n++;
+            }
+        }
+        else{
+            destination.add(source.get(index));
+            source.remove(index);
+
+
+            for (int i = 0; i <= destination.size()-1 ; i++){
+                destination.get(i).setFaceUp(false);
+            }
+
+            destination.get(destination.size()-1).setFaceUp(true);
+
+        }
+
+    }
+
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
         if (source.get(index).isFaceUp() && destination.get(destination.size() - 1).isFaceUp()) {
             return true;
