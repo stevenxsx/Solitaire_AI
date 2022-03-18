@@ -10,7 +10,6 @@ public class Game {
         AI ai = new AI(board);
         board.initialDeck.populate();
         board.initialDeck.shuffleDeck();
-        System.out.println("Initial Deck Size = " + board.initialDeck.size());
         board.initialPopulateBoard();
         board.printBoard();
         /*do {
