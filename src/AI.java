@@ -91,8 +91,7 @@ public class AI {
     public void executeBestCandidate() {
         //Feed it one move somehow
     }
-
-    //TODO Person currently working: Simon
+    
     // Search for Aces in number piles and move best candidate to foundation
     // Author SIMON
     private void scanForMoveType1() {
@@ -133,7 +132,6 @@ public class AI {
         }
     }
 
-    //TODO Person currently working: Simon
     // Search for Deuces in number piles and move best candidate to foundation
     // Author SIMON
     private void scanForMoveType2() {
@@ -181,7 +179,6 @@ public class AI {
         }
     }
 
-    //TODO Person currently working: Simon
     // Search for transferable face-up card(s) that will free a face-down card (including to foundation pile)
     // Author SIMON
     private void scanForMoveType3() {
