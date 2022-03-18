@@ -65,35 +65,11 @@ public class AI {
 
         //needs to break the sequence if a move is executed. check between every type of move.
         scanForMoveType1();
-
         scanForMoveType2();
-
         scanForMoveType3();
-
         scanForMoveType4();
-        validateCandidates4();
-        executeBestCandidate();
-
         scanForMoveType5();
-        validateCandidates5();
-        executeBestCandidate();
-
         scanForMoveType6();
-        validateCandidates6();
-        executeBestCandidate();
-
-        scanForMoveType7();
-        validateCandidates7();
-        executeBestCandidate();
-
-        scanForMoveType8();
-        validateCandidates8();
-        executeBestCandidate();
-
-        scanForMoveType9();
-        validateCandidates9();
-        executeBestCandidate();
-
         checkIfGameIsWon();
         noMovesFound();
 
@@ -218,50 +194,24 @@ public class AI {
     }
 
     //TODO Person currently working:
-    //  Transfer cards from column to column only to allow a downcard to be freed or to make the columns smoother.
+    // Search for transferable face-up card(s) that will clear a space
     private void scanForMoveType4() {
-
+    //        IF yes is a king playable?
+    //            IF yes can playing the king free up a downcard? (i.e. allow transfer of a queen)
+    //            ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
+    //                IF yes play then transfer card
+    //                THEN play king
     }
 
     //TODO Person currently working:
-    //  Don't clear a spot unless there's a King IMMEDIATELY waiting to occupy it.
+    // Search for a pile that can be smoothed
     private void scanForMoveType5() {
-
+        //        EITHER a top card or a group of cards that can be transfered to make a pile smooth
     }
 
     //TODO Person currently working:
-    //  Only play a King that will benefit the column(s) with the biggest pile of downcards,
-    //  unless the play of another King will at least allow a transfer that frees a downcard.
+    //  Search for cards that can be played from the Deck then play them
     private void scanForMoveType6() {
-
-    }
-
-    //TODO Person currently working:
-    //  Only build your Ace stacks (with anything other than an Ace or Deuce) when the play will:
-    //  Not interfere with your Next Card Protection
-    //  Allow a play or transfer that frees (or allows a play that frees) a downcard
-    //  Open up a space for a same-color card pile transfer that allows a downcard to be freed
-    //  Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
-    private void scanForMoveType7() {
-
-    }
-
-    //TODO Person currently working:
-    //  Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
-    //  It is smooth with it's next highest even/odd partner in the column
-    //  It will allow a play or transfer that will IMMEDIATELY free a downcard
-    //  There have not been any other cards already played to the column
-    //  You have ABSOLUTELY no other choice to continue playing
-    private void scanForMoveType8() {
-
-    }
-
-    //TODO Person currently working:
-    //  When you get to a point that you think all of your necessary cards are covered and you just can't get to them,
-    //  IMMEDIATELY play any cards you can to their appropriate Ace stacks. You may have to rearrange existing piles to
-    //  allow blocked cards freedom to be able to go to their Ace stack. Hopefully this will clear an existing pile up
-    //  to the point that you can use an existing pile upcard to substitute for the necessary covered card.
-    private void scanForMoveType9() {
 
     }
 
@@ -281,15 +231,6 @@ public class AI {
 
     }
     public void validateCandidates6() {
-
-    }
-    public void validateCandidates7() {
-
-    }
-    public void validateCandidates8() {
-
-    }
-    public void validateCandidates9() {
 
     }
 
