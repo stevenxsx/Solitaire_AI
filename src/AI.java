@@ -103,7 +103,7 @@ public class AI {
             try {
                 // Number pile variables
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-                int sourceTopCardIndex = sourceDeck.getTopCardIndex();
+                int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
                 Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
 
                 // Ace pile variables
@@ -143,7 +143,7 @@ public class AI {
             try {
                 // Number pile variables
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-                int sourceTopCardIndex = sourceDeck.getTopCardIndex();
+                int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
                 Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
 
                 // Ace pile variables
@@ -179,7 +179,7 @@ public class AI {
         }
     }
 
-    // Search for transferable face-up card(s) that will free a face-down card (including to foundation pile)
+    // Search for transferable face-up card(s) that will free a face-down card (the second to last card in pile is face-down)
     // Author SIMON
     private void scanForMoveType3() {
         // Initialize list of candidate card.
@@ -190,12 +190,13 @@ public class AI {
             try {
                 // Number pile variables
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
-                int sourceTopCardIndex = sourceDeck.getTopCardIndex();
+                int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
                 Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
 
-                // Check if transfering a card will free a down card (the second to last card in pile is face-down)
+                // Check if transfering a card will free a down card
                 if (sourceDeck.canFreeDownCard()) {
                     CardDeck destinationDeck;
+
                     // Check if top-card can be placed anywhere in the piles
                     for (int j = 1; j <= 7; i++) {
                         destinationDeck = this.board.getDeck(Integer.toString(j));
@@ -220,7 +221,7 @@ public class AI {
                         // Go through all the piles
                         for (int j = 1; j <= 11; i++) {
                             CardDeck deck = this.board.getDeck(Integer.toString(i));
-                            int deckTopCardIndex = deck.getTopCardIndex();
+                            int deckTopCardIndex = deck.getBottomFaceCardIndex();
                             Card deckTopCard = deck.get(deckTopCardIndex);
 
                             // if the same color (not suit!) + same number card is a topcard on a number pile
@@ -252,20 +253,106 @@ public class AI {
                 // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
             }
         }
-
-        // Or if both not-color cards are have already been played
-        // Transfer card
-        // If yes transfer card
     }
 
-    //TODO Person currently working: SIMON
+    //TODO Person currently working: Simon
     // Search for transferable face-up card(s) that will clear a space
+    // Play King if applicable
+    // Author: SIMON
     private void scanForMoveType4() {
-    //        IF yes is a king playable?
-    //            IF yes can playing the king free up a downcard? (i.e. allow transfer of a queen)
-    //            ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
-    //                IF yes play then transfer card
-    //                THEN play king
+        // Initialize variables
+        ArrayList<CardDeck> candidateKings = new ArrayList<>();
+
+        ArrayList<Card> drawDeck = this.board.drawDeck.getCards();
+        ArrayList<Card>  drawDiscard = this.board.drawDiscard.getCards();
+
+        ArrayList<CardDeck> mostDownCardsCandidates = new ArrayList<>();
+        CardDeck candidateDeck;
+        int candidateTopCardIndex;
+        Card candidateTopCard;
+
+        // Are one or more kings playable?
+        for (int k = 1; k <= 7; k++) {
+            CardDeck kingDeck = this.board.getDeck(Integer.toString(k));
+            mostDownCardsCandidates.add(kingDeck);
+            int kingCardIndex = kingDeck.getBottomFaceCardIndex();
+            Card kingCard = kingDeck.get(kingCardIndex);
+            if(kingCard.getValue() == 13){
+                candidateKings.add(kingDeck);
+            }
+        }
+        if (!candidateKings.isEmpty()){
+            // Search for a clearable space
+            for (int c = 1; c <= 7; c++) {
+                CardDeck clearableDeck = this.board.getDeck(Integer.toString(c));
+
+            }
+        }
+
+        candidateDeckSorter(mostDownCardsCandidates);
+        candidateDeck = mostDownCardsCandidates.get(mostDownCardsCandidates.size()-1);
+        candidateTopCardIndex = candidateDeck.getBottomFaceCardIndex();
+        candidateTopCard = candidateDeck.get(candidateTopCardIndex);
+
+        for (Card drawCard : drawDeck){
+            if(drawCard.getValue() == 13){
+                candidateKings.add(drawCard);
+            }
+        }
+        for (Card drawCard : drawDiscard){
+            if(drawCard.getValue() == 13){
+                candidateKings.add(drawCard);
+            }
+        }
+
+        if (!candidateKings.isEmpty()){
+            for (Card king : candidateKings){
+
+                // If yes can playing the king free up a downcard? (i.e. allow transfer of a queen)
+                for (int q = 1; q <= 7; q++) {
+                    CardDeck queenDeck = this.board.getDeck(Integer.toString(q));
+                    int queenCardIndex = queenDeck.getBottomFaceCardIndex();
+                    Card queenCard = queenDeck.get(queenCardIndex);
+                    if(
+                            queenDeck.canFreeDownCard() &&
+                            queenCard.getValue() == 12 &&
+                            king.isBlack() != queenCard.isBlack()
+                    ){
+                        finalKings.add(king);
+                    }
+                    // Else will this play benefit the pile with most downcards?
+                    // i.e. can it at some point be transferred to the new king pile?
+                    else if (
+                            king.isBlack() != candidateTopCard.isBlack() &&
+                            (
+                                candidateTopCard.getValue() == 10 ||
+                                candidateTopCard.getValue() == 8 ||
+                                candidateTopCard.getValue() == 6 ||
+                                candidateTopCard.getValue() == 4 ||
+                                candidateTopCard.getValue() == 2
+                            )
+                    ){
+                        finalKings.add(king);
+                    }
+                    else if (
+                            king.isBlack() == candidateTopCard.isBlack() &&
+                                (
+                                    candidateTopCard.getValue() == 11 ||
+                                    candidateTopCard.getValue() == 9 ||
+                                    candidateTopCard.getValue() == 7 ||
+                                    candidateTopCard.getValue() == 5 ||
+                                    candidateTopCard.getValue() == 3 ||
+                                    candidateTopCard.getValue() == 1
+                                )
+                    ){
+                        finalKings.add(king);
+                    }
+                }
+            }
+        }
+        //
+        //                IF yes play then transfer card
+        //
     }
 
     //TODO Person currently working:
@@ -310,6 +397,15 @@ public class AI {
         candidates.sort(
                 Comparator.comparing(
                         c -> c.getSourceDeck().getNumberOfFaceDownCards()
+                )
+        );
+    }
+
+    // Same as candidateSorter but for decks
+    private void candidateDeckSorter(ArrayList<CardDeck> candidates) {
+        candidates.sort(
+                Comparator.comparing(
+                        c -> c.getNumberOfFaceDownCards()
                 )
         );
     }
