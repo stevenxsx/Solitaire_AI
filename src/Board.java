@@ -180,9 +180,9 @@ public class Board {
     //is equal to the pile you want
     public CardDeck getDeck(String input) throws Exception {
         return switch (input) {
-            case "deck" -> initialDeck;
-            case "draw" -> drawDeck;
-            case "discard" -> drawDiscard;
+            case "-1", "deck" -> initialDeck;
+            case "12", "draw" -> drawDeck;
+            case "13", "discard" -> drawDiscard;
             case "1" -> pile1;
             case "2" -> pile2;
             case "3" -> pile3;
@@ -190,10 +190,10 @@ public class Board {
             case "5" -> pile5;
             case "6" -> pile6;
             case "7" -> pile7;
-            case "hearts" -> heartsPile;
-            case "spades" -> spadesPile;
-            case "diamonds" -> diamondsPile;
-            case "clubs" -> clubsPile;
+            case "8", "hearts" -> heartsPile;
+            case "9", "spades" -> spadesPile;
+            case "10", "diamonds" -> diamondsPile;
+            case "11", "clubs" -> clubsPile;
             default -> throw new Exception("Typo in deck name \"" + input + "\"");
         };
     }
