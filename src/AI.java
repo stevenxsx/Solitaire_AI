@@ -128,10 +128,10 @@ public class AI {
                 // Default is just an empty deck.
                 if ( sourceTopCard.getValue() == 1){
                     switch (sourceTopCard.getSuit()){
-                        case HEARTS -> destinationDeck = this.board.getDeck("heartsPile");
-                        case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
-                        case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
-                        case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
+                        case HEARTS -> destinationDeck = board.heartsPile;
+                        case SPADES -> destinationDeck = board.spadesPile;
+                        case DIAMONDS -> destinationDeck = board.diamondsPile;
+                        case CLUBS -> destinationDeck = board.clubsPile;
                         default -> destinationDeck = new CardDeck();
                     }
                     candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
@@ -170,10 +170,10 @@ public class AI {
                 // Default is just so deck is a non-empty, non-ace deck.
                 if ( sourceTopCard.getValue() == 2){
                     switch (sourceTopCard.getSuit()){
-                        case HEARTS -> destinationDeck = this.board.getDeck("heartsPile");
-                        case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
-                        case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
-                        case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
+                        case HEARTS -> destinationDeck = board.heartsPile;
+                        case SPADES -> destinationDeck = board.spadesPile;
+                        case DIAMONDS -> destinationDeck = board.diamondsPile;
+                        case CLUBS -> destinationDeck = board.clubsPile;
                         default -> destinationDeck = sourceDeck;
                     }
 
@@ -209,26 +209,49 @@ public class AI {
     }
 
     //TODO Person currently working:
+    //  Transfer cards from column to column only to allow a downcard to be freed or to make the columns smoother.
     private void scanForMoveType4() {
 
     }
+
     //TODO Person currently working:
+    //  Don't clear a spot unless there's a King IMMEDIATELY waiting to occupy it.
     private void scanForMoveType5() {
 
     }
+
     //TODO Person currently working:
+    //  Only play a King that will benefit the column(s) with the biggest pile of downcards,
+    //  unless the play of another King will at least allow a transfer that frees a downcard.
     private void scanForMoveType6() {
 
     }
+
     //TODO Person currently working:
+    //  Only build your Ace stacks (with anything other than an Ace or Deuce) when the play will:
+    //  Not interfere with your Next Card Protection
+    //  Allow a play or transfer that frees (or allows a play that frees) a downcard
+    //  Open up a space for a same-color card pile transfer that allows a downcard to be freed
+    //  Clear a spot for an IMMEDIATE waiting King (it cannot be to simply clear a spot)
     private void scanForMoveType7() {
 
     }
+
     //TODO Person currently working:
+    //  Don't play or transfer a 5, 6, 7 or 8 anywhere unless at least one of these situations will apply after the play:
+    //  It is smooth with it's next highest even/odd partner in the column
+    //  It will allow a play or transfer that will IMMEDIATELY free a downcard
+    //  There have not been any other cards already played to the column
+    //  You have ABSOLUTELY no other choice to continue playing
     private void scanForMoveType8() {
 
     }
+
     //TODO Person currently working:
+    //  When you get to a point that you think all of your necessary cards are covered and you just can't get to them,
+    //  IMMEDIATELY play any cards you can to their appropriate Ace stacks. You may have to rearrange existing piles to
+    //  allow blocked cards freedom to be able to go to their Ace stack. Hopefully this will clear an existing pile up
+    //  to the point that you can use an existing pile upcard to substitute for the necessary covered card.
     private void scanForMoveType9() {
 
     }
