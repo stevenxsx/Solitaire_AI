@@ -15,9 +15,6 @@ public class AI {
 
     /*ToDo AI functions
         All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
-        SIMON -- Search for Ace in number piles and move to foundation
-        SIMON -- Search for Deuce in number piles and move to foundation
-        SIMON -- Search for transferable face-up card(s) that will free a face-down card
         If search returns multiple options select pile with most face-down cards
         Search for transferable face-up card(s) that will clear a space
         IF yes is a king playable?
@@ -25,7 +22,6 @@ public class AI {
         ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
         IF yes play then transfer card
         THEN play king
-        SIMON -- Search for any card that can be transfered to an Ace-stack
         Vet candidates
         Keep candidate
         IF its same color twin is on the board (e.g. keep 3D if 3H is in play)
@@ -111,6 +107,7 @@ public class AI {
         //Feed it one move somehow
     }
 
+    //TODO Person currently working: Simon
     // Search for Aces in number piles and move best candidate to foundation
     private void scanForMoveType1() {
         // Initialize list of candidate card.
@@ -150,6 +147,7 @@ public class AI {
         }
     }
 
+    //TODO Person currently working: Simon
     // Search for Deuces in number piles and move best candidate to foundation
     private void scanForMoveType2() {
         // Initialize list of candidate card.
@@ -197,6 +195,7 @@ public class AI {
         }
     }
 
+    //TODO Person currently working: Simon
     // Search for transferable face-up card(s) that will free a face-down card
     private void scanForMoveType3() {
         // Search all number piles
@@ -208,21 +207,28 @@ public class AI {
                         // Transfer card
                 // If yes transfer card
     }
+
+    //TODO Person currently working:
     private void scanForMoveType4() {
 
     }
+    //TODO Person currently working:
     private void scanForMoveType5() {
 
     }
+    //TODO Person currently working:
     private void scanForMoveType6() {
 
     }
+    //TODO Person currently working:
     private void scanForMoveType7() {
 
     }
+    //TODO Person currently working:
     private void scanForMoveType8() {
 
     }
+    //TODO Person currently working:
     private void scanForMoveType9() {
 
     }
