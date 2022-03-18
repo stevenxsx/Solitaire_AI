@@ -73,6 +73,14 @@ public class CardDeck {
         return s.toString();
     }
 
+    public String printCard(int index) {
+        if (index > this.size()-1) { return "";}
+        else if (index >= 0 && this.size() >= 1) {
+            return get(index).getValueLetter() + get(index).getSuitLetter();
+        }
+        return "[]";
+    }
+
     private Card popCard() throws NotEnoughCardsException {
         if (this.cards.size() != 0) {
             return this.cards.remove(this.cards.size()-1);

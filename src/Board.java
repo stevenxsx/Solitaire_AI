@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Board {
 
     //All board operations and card movement go in this class.
@@ -24,43 +26,43 @@ public class Board {
 
         //Attempts to move card(s) from number pile to number pile.
         if (isNumberPile(s) && isNumberPile(d)) {
-            if (canMoveToNumberPile(s, d,x)) {
-                moveCardDeckToDeck(s,d,x,true);
+            if (canMoveToNumberPile(s, d, x)) {
+                moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from number pile to foundation
         else if (isNumberPile(s) && isFoundationPile(d)) {
-            if (canMoveToFoundation(s,d,x)) {
-                moveCardDeckToDeck(s,d,x,true);
+            if (canMoveToFoundation(s, d, x)) {
+                moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from foundation to number pile
         else if (isFoundationPile(s) && isNumberPile(d)) {
-            if (canMoveToNumberPile(s,d,x)) {
-                moveCardDeckToDeck(s,d,x,true);
+            if (canMoveToNumberPile(s, d, x)) {
+                moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from Draw to Discard
         else if (isDrawPile(s) && isDiscardPile(d)) {
-            if (s.size()-1 == x) {
-                moveCardDeckToDeck(s,d,x,true);
+            if (s.size() - 1 == x) {
+                moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from Discard to Number pile
         else if (isDiscardPile(s) && isNumberPile(d)) {
-            if (canMoveToNumberPile(s,d,x)) {
-                moveCardDeckToDeck(s,d,x,true);
+            if (canMoveToNumberPile(s, d, x)) {
+                moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
         }
         //Attempts to move card from Discard to Foundation
         else if (isDiscardPile(s) && isFoundationPile(d)) {
-            if (canMoveToFoundation(s,d,x)) {
-                moveCardDeckToDeck(s,d,x,true);
+            if (canMoveToFoundation(s, d, x)) {
+                moveCardDeckToDeck(s, d, x, true);
                 return true;
             }
         }
@@ -76,17 +78,17 @@ public class Board {
         boolean isFaceUp;
         boolean legalNumberOfCards = true;
         //Source number value is 1 less than destination number.
-        if (destination.get(destination.size()-1).getValue() - source.get(index).getValue() == 1) {
+        if (destination.get(destination.size() - 1).getValue() - source.get(index).getValue() == 1) {
             value = true;
         }
         //Source color is opposite of destination color
-        if ((source.get(index).isRed() && destination.get(destination.size()-1).isBlack()) || (source.get(index).isBlack() && source.get(index).isRed())) {
+        if ((source.get(index).isRed() && destination.get(destination.size() - 1).isBlack()) || (source.get(index).isBlack() && source.get(index).isRed())) {
             suit = true;
         }
         //Both cards must be face-up for the move to make any sense
-        isFaceUp = areFaceUp(source,destination,index);
+        isFaceUp = areFaceUp(source, destination, index);
         //Can only move multiple cards if the source deck is a number pile.
-        if (source.size()-1 > index && !isNumberPile(source)) {
+        if (source.size() - 1 > index && !isNumberPile(source)) {
             legalNumberOfCards = false;
         }
 
@@ -102,16 +104,19 @@ public class Board {
         boolean isFaceUp;
 
         //You can only move the last card in a pile to a foundation (1 at a time)
-        if (source.size()-1 == index) {legalIndex = true;}
+        if (source.size() - 1 == index) {
+            legalIndex = true;
+        }
         //Suits must match on source & destination
         if ((suit == Suit.HEARTS && destination == heartsPile)
                 || (suit == Suit.SPADES && destination == spadesPile)
                 || (suit == Suit.DIAMONDS && destination == diamondsPile)
-                || (suit == Suit.CLUBS && destination == clubsPile))
-        {matchingSuit = true;        }
+                || (suit == Suit.CLUBS && destination == clubsPile)) {
+            matchingSuit = true;
+        }
         //Source number must be 1 higher than destination number
         if (destination.size() > 0) {
-            if (source.get(index).getValue() - destination.get(destination.size()-1).getValue() == 1) {
+            if (source.get(index).getValue() - destination.get(destination.size() - 1).getValue() == 1) {
                 matchingValue = true;
             }
         }
@@ -122,27 +127,26 @@ public class Board {
             }
         }
         //Double-check that both cards are face-up.
-        isFaceUp = areFaceUp(source,destination,index);
+        isFaceUp = areFaceUp(source, destination, index);
 
         return (legalIndex && matchingSuit && matchingValue && isFaceUp);
     }
 
-    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index,boolean flipFaceUp) {
+    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index, boolean flipFaceUp) {
 
         //forced move -> no check to see if its legal
         //Moves every card from the index to the end in order of index first
         while (source.size() > index) {
             destination.add(source.get(index));
             source.remove(index);
-            destination.get(destination.size()-1).setFaceUp(flipFaceUp);
+            destination.get(destination.size() - 1).setFaceUp(flipFaceUp);
         }
     }
 
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
-        if (source.get(index).isFaceUp() && destination.get(destination.size()-1).isFaceUp()) {
+        if (source.get(index).isFaceUp() && destination.get(destination.size() - 1).isFaceUp()) {
             return true;
-        }
-        else {
+        } else {
             System.out.println("Attempted to move a face-down card.");
             return false;
         }
@@ -151,7 +155,7 @@ public class Board {
     public boolean numberOfCardsMovedIsLegal(CardDeck source, CardDeck destination, int index) {
         boolean isLegal = false;
         //If moving 1 card, move is legal
-        if (index == source.size()-1) {
+        if (index == source.size() - 1) {
             isLegal = true;
         }
         //If moving multiple cards, both source & destination must be number piles.
@@ -164,16 +168,18 @@ public class Board {
     public boolean isNumberPile(CardDeck source) {
         return source == pile1 || source == pile2 || source == pile3 || source == pile4 || source == pile5 || source == pile6 || source == pile7;
     }
+
     public boolean isDiscardPile(CardDeck source) {
         return source == drawDiscard;
     }
+
     public boolean isDrawPile(CardDeck source) {
         return source == drawDeck;
     }
+
     public boolean isFoundationPile(CardDeck source) {
         return source == heartsPile || source == spadesPile || source == diamondsPile || source == clubsPile;
     }
-
 
 
     //Allows for referencing all the card decks by string. Useful for using the 7 piles in for loops where 'i'
@@ -203,15 +209,18 @@ public class Board {
         for (int i = 1; i <= 7; i++) {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
             moveCardDeckToDeck(initialDeck, getDeck(Integer.toString(i)),
-                    initialDeck.size()-(i),false);
-            getDeck(Integer.toString(i)).get(i-1).setFaceUp(true);
+                    initialDeck.size() - (i), false);
+            getDeck(Integer.toString(i)).get(i - 1).setFaceUp(true);
 
         }
-        moveCardDeckToDeck(initialDeck,drawDeck, 0,false);
+        moveCardDeckToDeck(initialDeck, drawDeck, 0, false);
     }
 
     public void printBoard() {
-        String sb = initialDeck.toString("Initial") +
+        String tab = "\t";
+        String dtab = "\t\t";
+
+        /*String sb = initialDeck.toString("Initial") +
                 drawDeck.toString("Draw") +
                 drawDiscard.toString("Discard") +
                 pile1.toString("Pile1") +
@@ -225,11 +234,42 @@ public class Board {
                 spadesPile.toString("Spades") +
                 diamondsPile.toString("Diamonds") +
                 clubsPile.toString("Clubs");
-        System.out.println(sb);
+        System.out.println(sb);*/
 
         // Create new super print method with formatting
+        System.out.println("F1" + dtab + "F2" + dtab + "F3" + dtab + "F4");
+        System.out.println(heartsPile.printCard(heartsPile.size() - 1) + dtab + spadesPile.printCard(spadesPile.size() - 1)
+                + dtab + diamondsPile.printCard(diamondsPile.size() - 1) + dtab + clubsPile.printCard(clubsPile.size() - 1));
+        System.out.println("C1  C2 \tC3 \tC4 \tC5 \tC6 \tC7");
+        for (int i = 0; i < longestNumberPileLength(); i++) {
+            System.out.println(pile1.printCard(i) + tab
+                    + pile2.printCard(i) + tab
+                    + pile3.printCard(i) + tab
+                    + pile4.printCard(i) + tab
+                    + pile5.printCard(i) + tab
+                    + pile6.printCard(i) + tab
+                    + pile7.printCard(i));
+        }
 
 
+    }
+
+    public int longestNumberPileLength() {
+        int l = 0;
+        ArrayList<CardDeck> piles = new ArrayList<>();
+        piles.add(pile1);
+        piles.add(pile2);
+        piles.add(pile3);
+        piles.add(pile4);
+        piles.add(pile5);
+        piles.add(pile6);
+        piles.add(pile7);
+        for (CardDeck a : piles) {
+            if (a.size() > l) {
+                l = a.size();
+            }
+        }
+        return l;
     }
 
 }
