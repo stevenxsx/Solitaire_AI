@@ -112,6 +112,11 @@ public class CardDeck {
         return number;
     }
 
+    public ArrayList<Card> getFaceUpCards(){
+        int lastFaceDownIndex = getNumberOfFaceDownCards()-1;
+        return (ArrayList<Card>) this.cards.subList(lastFaceDownIndex+1, this.cards.size());
+    }
+
     // Pass this function the index of a card in the deck to see if it matches the given card
     public boolean isCardValue(int index, Card card){
         Card deckCard = this.cards.get(index);
