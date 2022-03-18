@@ -56,7 +56,7 @@ public class CardDeck {
             for (int i = numberOfCards; i != 0; i--){
                 dealtCards.add(this.popCard());
             }
-            dealtCards.get(this.cards.size()-1).faceCardUp(true);
+            dealtCards.get(this.cards.size()-1).setFaceUp(true);
             return dealtCards;
         } else {
             throw new NotEnoughCardsException("The deck only has" + cards.size() + "cards");
@@ -67,7 +67,7 @@ public class CardDeck {
         StringBuilder s = new StringBuilder();
         s.append(deckName).append(" includes the following:\n");
         for (Card card : cards) {
-            s.append(card.toString()).append(" - Face Up -> ").append(card.getFaceUp()).append("\n");
+            s.append(card.toString()).append(" - Face Up -> ").append(card.isFaceUp()).append("\n");
         }
         s.append("\n");
         return s.toString();
@@ -93,7 +93,39 @@ public class CardDeck {
         cards.add(card);
     }
 
-    public void remove(int index) {
-        cards.remove(index);
+    public void remove(int index) { cards.remove(index);
+    }
+
+    //Call this function to recieve the index of the top card in the deck
+    public int getTopCardIndex() {
+        return this.cards.size()-1;
+    }
+
+    // Call this function to recieve the number of face down cards in the deck
+    public Integer getNumberOfFaceDownCards(){
+        int number = 0;
+        for (Card card : this.cards){
+            if(!card.isFaceUp()){
+                number++;
+            }
+        }
+        return number;
+    }
+
+    public ArrayList<Card> getFaceUpCards(){
+        int lastFaceDownIndex = getNumberOfFaceDownCards()-1;
+        return (ArrayList<Card>) this.cards.subList(lastFaceDownIndex+1, this.cards.size());
+    }
+
+    // Pass this function the index of a card in the deck to see if it matches the given card
+    public boolean isCardValue(int index, Card card){
+        Card deckCard = this.cards.get(index);
+        return deckCard.getValue() == card.getValue() &&
+                deckCard.getSuit() == card.getSuit();
+    }
+
+    // Call this function to check if popping the topcard will free a downcard
+    public boolean canFreeDownCard(){
+        return !this.cards.get(getTopCardIndex()-1).isFaceUp();
     }
 }

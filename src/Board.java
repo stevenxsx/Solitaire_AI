@@ -17,87 +17,172 @@ public class Board {
     CardDeck diamondsPile = new CardDeck(); // "diamonds"
     CardDeck clubsPile = new CardDeck(); // "clubs"
 
-    public boolean canMoveToNumberPile(Card source, Card destination) {
+    public boolean attemptMove(Move move) {
+        CardDeck s = move.getSourceDeck();
+        CardDeck d = move.getDestinationDeck();
+        int x = move.getIndex();
+
+        //Attempts to move card(s) from number pile to number pile.
+        if (isNumberPile(s) && isNumberPile(d)) {
+            if (canMoveToNumberPile(s, d,x)) {
+                moveCardDeckToDeck(s,d,x,true);
+                return true;
+            }
+        }
+        //Attempts to move card from number pile to foundation
+        else if (isNumberPile(s) && isFoundationPile(d)) {
+            if (canMoveToFoundation(s,d,x)) {
+                moveCardDeckToDeck(s,d,x,true);
+                return true;
+            }
+        }
+        //Attempts to move card from foundation to number pile
+        else if (isFoundationPile(s) && isNumberPile(d)) {
+            if (canMoveToNumberPile(s,d,x)) {
+                moveCardDeckToDeck(s,d,x,true);
+                return true;
+            }
+        }
+        //Attempts to move card from Draw to Discard
+        else if (isDrawPile(s) && isDiscardPile(d)) {
+            if (s.size()-1 == x) {
+                moveCardDeckToDeck(s,d,x,true);
+                return true;
+            }
+        }
+        //Attempts to move card from Discard to Number pile
+        else if (isDiscardPile(s) && isNumberPile(d)) {
+            if (canMoveToNumberPile(s,d,x)) {
+                moveCardDeckToDeck(s,d,x,true);
+                return true;
+            }
+        }
+        //Attempts to move card from Discard to Foundation
+        else if (isDiscardPile(s) && isFoundationPile(d)) {
+            if (canMoveToFoundation(s,d,x)) {
+                moveCardDeckToDeck(s,d,x,true);
+                return true;
+            }
+        }
+        //If the move wasnt legal, and wasnt executed
+        System.out.println("Illegal move sent to attemptMove():\nSource: " + s.toString() + "Destination: " + d.toString() + "Index: " + x);
+        return false;
+    }
+
+    // Check if the index card in the source pile is allowed to be moved to the destination number pile.
+    public boolean canMoveToNumberPile(CardDeck source, CardDeck destination, int index) {
         boolean value = false;
         boolean suit = false;
-        if (destination.getValue() - source.getValue() == 1) {
+        boolean isFaceUp;
+        boolean legalNumberOfCards = true;
+        //Source number value is 1 less than destination number.
+        if (destination.get(destination.size()-1).getValue() - source.get(index).getValue() == 1) {
             value = true;
         }
-        if ((source.isRed() && destination.isBlack()) || (source.isBlack() && source.isRed())) {
+        //Source color is opposite of destination color
+        if ((source.get(index).isRed() && destination.get(destination.size()-1).isBlack()) || (source.get(index).isBlack() && source.get(index).isRed())) {
             suit = true;
-        } {
-
         }
-        return (value && suit);
-    }
-    /* AI functions
-     All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
-     Search for Ace in number piles and move to foundation
-     Search for Deuce in number piles and move to foundation
-     Search for transferable face-up card(s) that will free a face-down card
-         If search returns multiple options select pile with most face-down cards
-     Search for transferable face-up card(s) that will clear a space
-        IF yes is a king playable?
-            IF yes can playing the king free up a downcard? (i.e. allow transfer of a queen)
-            ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
-                IF yes play then transfer card
-                THEN play king
-     Search for any card that can be transfered to an Ace-stack
-         Vet candidates
-             Keep candidate
-                 IF its same color twin is on the board (e.g. keep 3D if 3H is in play)
-                 OR if it's not-same color successors are on the board (e.g. keep 3D if both 2C & 2S are in play)
-                     AND the play will free a downcard
-                     Nice to have smarty pants AI option: OR if the subsequent play will free a downcard
-                     OR it will clear a spot for a waiting king (remember to call "should I clear a space?" function)
-     Search for a pile that can be smoothed
-        EITHER a top card or a group of cards that can be transfered to make a pile smooth
-    Search for cards that can be played from the Deck then play them
-    Another nice to have smarty pants AI option: Try to transfer cards/piles to open up playing cards from the dack
-    IF no plays can be made, flip the table and rage quit!
-    */
+        //Both cards must be face-up for the move to make any sense
+        isFaceUp = areFaceUp(source,destination,index);
+        //Can only move multiple cards if the source deck is a number pile.
+        if (source.size()-1 > index && !isNumberPile(source)) {
+            legalNumberOfCards = false;
+        }
 
+        return (value && suit && isFaceUp && legalNumberOfCards);
+    }
+
+    // Check if the index card in the source pile is allowed to be moved to the destination foundation pile.
     public boolean canMoveToFoundation(CardDeck source, CardDeck destination, int index) {
         boolean legalIndex = false;
         Suit suit = source.get(index).getSuit();
         boolean matchingSuit = false;
         boolean matchingValue = false;
+        boolean isFaceUp;
 
+        //You can only move the last card in a pile to a foundation (1 at a time)
         if (source.size()-1 == index) {legalIndex = true;}
+        //Suits must match on source & destination
         if ((suit == Suit.HEARTS && destination == heartsPile)
-        || (suit == Suit.SPADES && destination == spadesPile)
-        || (suit == Suit.DIAMONDS && destination == diamondsPile)
-        || (suit == Suit.CLUBS && destination == clubsPile))
+                || (suit == Suit.SPADES && destination == spadesPile)
+                || (suit == Suit.DIAMONDS && destination == diamondsPile)
+                || (suit == Suit.CLUBS && destination == clubsPile))
         {matchingSuit = true;        }
+        //Source number must be 1 higher than destination number
         if (destination.size() > 0) {
             if (source.get(index).getValue() - destination.get(destination.size()-1).getValue() == 1) {
                 matchingValue = true;
             }
         }
+        //Otherwise, the source must be an Ace and the destination pile empty
         else if (destination.size() == 0) {
             if (source.get(index).getValue() == 1) {
                 matchingValue = true;
             }
         }
-        return (legalIndex && matchingSuit && matchingValue);
+        //Double-check that both cards are face-up.
+        isFaceUp = areFaceUp(source,destination,index);
+
+        return (legalIndex && matchingSuit && matchingValue && isFaceUp);
     }
 
-    public void moveCardDeckToDeck(CardDeck deck1, CardDeck deck2, int index,boolean flipFaceUp) {
+    public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index,boolean flipFaceUp) {
 
         //forced move -> no check to see if its legal
-        while (deck1.size() > index) {
-            deck2.add(deck1.get(index));
-            deck1.remove(index);
+        //Moves every card from the index to the end in order of index first
+        while (source.size() > index) {
+            destination.add(source.get(index));
+            source.remove(index);
+            destination.get(destination.size()-1).setFaceUp(flipFaceUp);
         }
     }
+
+    public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
+        if (source.get(index).isFaceUp() && destination.get(destination.size()-1).isFaceUp()) {
+            return true;
+        }
+        else {
+            System.out.println("Attempted to move a face-down card.");
+            return false;
+        }
+    }
+
+    public boolean numberOfCardsMovedIsLegal(CardDeck source, CardDeck destination, int index) {
+        boolean isLegal = false;
+        //If moving 1 card, move is legal
+        if (index == source.size()-1) {
+            isLegal = true;
+        }
+        //If moving multiple cards, both source & destination must be number piles.
+        else if (isNumberPile(source) && isNumberPile(destination)) {
+            isLegal = true;
+        }
+        return isLegal;
+    }
+
+    public boolean isNumberPile(CardDeck source) {
+        return source == pile1 || source == pile2 || source == pile3 || source == pile4 || source == pile5 || source == pile6 || source == pile7;
+    }
+    public boolean isDiscardPile(CardDeck source) {
+        return source == drawDiscard;
+    }
+    public boolean isDrawPile(CardDeck source) {
+        return source == drawDeck;
+    }
+    public boolean isFoundationPile(CardDeck source) {
+        return source == heartsPile || source == spadesPile || source == diamondsPile || source == clubsPile;
+    }
+
+
 
     //Allows for referencing all the card decks by string. Useful for using the 7 piles in for loops where 'i'
     //is equal to the pile you want
     public CardDeck getDeck(String input) throws Exception {
         return switch (input) {
-            case "deck" -> initialDeck;
-            case "draw" -> drawDeck;
-            case "discard" -> drawDiscard;
+            case "-1", "deck" -> initialDeck;
+            case "12", "draw" -> drawDeck;
+            case "13", "discard" -> drawDiscard;
             case "1" -> pile1;
             case "2" -> pile2;
             case "3" -> pile3;
@@ -105,10 +190,10 @@ public class Board {
             case "5" -> pile5;
             case "6" -> pile6;
             case "7" -> pile7;
-            case "hearts" -> heartsPile;
-            case "spades" -> spadesPile;
-            case "diamonds" -> diamondsPile;
-            case "clubs" -> clubsPile;
+            case "8", "hearts" -> heartsPile;
+            case "9", "spades" -> spadesPile;
+            case "10", "diamonds" -> diamondsPile;
+            case "11", "clubs" -> clubsPile;
             default -> throw new Exception("Typo in deck name \"" + input + "\"");
         };
     }
@@ -119,29 +204,27 @@ public class Board {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
             moveCardDeckToDeck(initialDeck, getDeck(Integer.toString(i)),
                     initialDeck.size()-(i),false);
-            getDeck(Integer.toString(i)).get(i-1).faceCardUp(true);
+            getDeck(Integer.toString(i)).get(i-1).setFaceUp(true);
 
         }
         moveCardDeckToDeck(initialDeck,drawDeck, 0,false);
     }
 
     public void printBoard() {
-        StringBuilder sb = new StringBuilder();
-        sb
-                .append(initialDeck.toString("Initial"))
-                .append(drawDeck.toString("Draw"))
-                .append(drawDiscard.toString("Discard"))
-                .append(pile1.toString("Pile1"))
-                .append(pile2.toString("Pile2"))
-                .append(pile3.toString("Pile"))
-                .append(pile4.toString("Pile4"))
-                .append(pile5.toString("Pile5"))
-                .append(pile6.toString("Pile6"))
-                .append(pile7.toString("Pile7"))
-                .append(heartsPile.toString("Hearts"))
-                .append(spadesPile.toString("Spades"))
-                .append(diamondsPile.toString("Diamonds"))
-                .append(clubsPile.toString("Clubs"));
+        String sb = initialDeck.toString("Initial") +
+                drawDeck.toString("Draw") +
+                drawDiscard.toString("Discard") +
+                pile1.toString("Pile1") +
+                pile2.toString("Pile2") +
+                pile3.toString("Pile") +
+                pile4.toString("Pile4") +
+                pile5.toString("Pile5") +
+                pile6.toString("Pile6") +
+                pile7.toString("Pile7") +
+                heartsPile.toString("Hearts") +
+                spadesPile.toString("Spades") +
+                diamondsPile.toString("Diamonds") +
+                clubsPile.toString("Clubs");
         System.out.println(sb);
 
         // Create new super print method with formatting
@@ -149,13 +232,4 @@ public class Board {
 
     }
 
-    //Superfluous method?
-    /*public String toString(ArrayList<Card> deck) {
-        StringBuilder sb = new StringBuilder();
-        for (Card c:deck
-             ) {
-            sb.append(c.toString());
-        }
-        return sb.toString();
-    }*/
 }
