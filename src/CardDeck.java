@@ -104,12 +104,14 @@ public class CardDeck {
     public void remove(int index) { cards.remove(index);
     }
 
-    //Call this function to recieve the index of the top card in the deck
-    public int getTopCardIndex() {
-        return this.cards.size()-1;
+    //Call this function to receive the index of the top card in the deck
+    // Author: SIMON
+    public Integer getBottomFaceCardIndex() {
+        return getNumberOfFaceDownCards();
     }
 
-    // Call this function to recieve the number of face down cards in the deck
+    // Call this function to receive the number of face down cards in the deck
+    // Author: SIMON
     public Integer getNumberOfFaceDownCards(){
         int number = 0;
         for (Card card : this.cards){
@@ -120,20 +122,30 @@ public class CardDeck {
         return number;
     }
 
+    // Returns all cards in the deck
+    // Author: Simon
+    public ArrayList<Card> getCards(){
+        return this.cards;
+    }
+
+    // Returns a sublist of all the faceup cards in the deck
+    // Author: SIMON
     public ArrayList<Card> getFaceUpCards(){
         int lastFaceDownIndex = getNumberOfFaceDownCards()-1;
         return (ArrayList<Card>) this.cards.subList(lastFaceDownIndex+1, this.cards.size());
     }
 
     // Pass this function the index of a card in the deck to see if it matches the given card
-    public boolean isCardValue(int index, Card card){
+    // Author: SIMON
+    public boolean isCardSuitAndValue(int index, Card card){
         Card deckCard = this.cards.get(index);
         return deckCard.getValue() == card.getValue() &&
                 deckCard.getSuit() == card.getSuit();
     }
 
     // Call this function to check if popping the topcard will free a downcard
+    // Author: SIMON
     public boolean canFreeDownCard(){
-        return !this.cards.get(getTopCardIndex()-1).isFaceUp();
+        return !this.cards.get(getBottomFaceCardIndex()-1).isFaceUp();
     }
 }
