@@ -94,12 +94,13 @@ public class AI {
 
     //TODO Person currently working: Simon
     // Search for Aces in number piles and move best candidate to foundation
+    // Author SIMON
     private void scanForMoveType1() {
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
 
         // Scan number piles
-        for(int i = 1; i <= 7; i++){
+        for (int i = 1; i <= 7; i++) {
             try {
                 // Number pile variables
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
@@ -108,7 +109,7 @@ public class AI {
 
                 // Ace pile variables
                 CardDeck destinationDeck;
-                
+
                 // Identify destionation Ace pile. Only runs if source card is an Ace.
                 // Default is just an empty deck.
                 if ( sourceTopCard.getValue() == 1){
@@ -125,7 +126,7 @@ public class AI {
                 e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
             }
         }
-        // Sort candidates, if any, in ascending order
+        // If there are candidates execute the move with the most downcards.
         if (!candidates.isEmpty()) {
             candidateSorter(candidates);
             // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
@@ -134,12 +135,13 @@ public class AI {
 
     //TODO Person currently working: Simon
     // Search for Deuces in number piles and move best candidate to foundation
+    // Author SIMON
     private void scanForMoveType2() {
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
 
         // Scan number piles
-        for(int i = 1; i <= 7; i++){
+        for (int i = 1; i <= 7; i++) {
             try {
                 // Number pile variables
                 CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
@@ -163,8 +165,7 @@ public class AI {
                     }
 
                     // Check if the top card of the destionation pile is an ace, if so add candidate
-                    destionationTopCardIndex = destinationDeck.getTopCardIndex();
-                    if (destinationDeck.isCardValue(destionationTopCardIndex, ace)){
+                    if (board.canMoveToFoundation(sourceDeck, destinationDeck, sourceTopCardIndex)) {
                         candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
                     }
                 }
@@ -172,7 +173,7 @@ public class AI {
                 e.printStackTrace(); // Strings are hardcorded so this is used for bughunting
             }
         }
-        // Sort candidates, if any, in ascending order
+        // If there are candidates execute the move with the most downcards.
         if (!candidates.isEmpty()) {
             candidateSorter(candidates);
             // Execute best candidate move.
@@ -181,16 +182,83 @@ public class AI {
     }
 
     //TODO Person currently working: Simon
-    // Search for transferable face-up card(s) that will free a face-down card
+    // Search for transferable face-up card(s) that will free a face-down card (including to foundation pile)
+    // Author SIMON
     private void scanForMoveType3() {
+        // Initialize list of candidate card.
+        ArrayList<Move> candidates = new ArrayList<>();
+
         // Search all number piles
-        // Check if transfering a card will free a down card (the second to last card in pile is face-down)
-            // Check if top-card can be placed anywhere in the piles
-                // If not check if top-card can be placed on Ace stack
-                    // If yes check if the same color same number card is a topcard on a pil
-                    // Or if both not-color cards are have already been played
-                        // Transfer card
-                // If yes transfer card
+        for (int i = 1; i <= 7; i++) {
+            try {
+                // Number pile variables
+                CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+                int sourceTopCardIndex = sourceDeck.getTopCardIndex();
+                Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+
+                // Check if transfering a card will free a down card (the second to last card in pile is face-down)
+                if (sourceDeck.canFreeDownCard()) {
+                    CardDeck destinationDeck;
+                    // Check if top-card can be placed anywhere in the piles
+                    for (int j = 1; j <= 7; i++) {
+                        destinationDeck = this.board.getDeck(Integer.toString(j));
+                        if (board.canMoveToNumberPile(sourceDeck, destinationDeck, sourceTopCardIndex)) {
+                            candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
+                        }
+                    }
+                    // Check if top-card can be placed on Ace stack
+                    switch (sourceTopCard.getSuit()) {
+                        case HEARTS -> destinationDeck = this.board.getDeck("heartsPile");
+                        case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
+                        case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
+                        case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
+                        default -> destinationDeck = new CardDeck();
+                    }
+                    if (board.canMoveToFoundation(sourceDeck, destinationDeck, sourceTopCardIndex)) {
+                        // If yes we need to ensuer that the next card is protected.
+                        // Initialize helper variables
+                        boolean canMove = false;
+                        int nextCardsPlayed = 0;
+
+                        // Go through all the piles
+                        for (int j = 1; j <= 11; i++) {
+                            CardDeck deck = this.board.getDeck(Integer.toString(i));
+                            int deckTopCardIndex = deck.getTopCardIndex();
+                            Card deckTopCard = deck.get(deckTopCardIndex);
+
+                            // if the same color (not suit!) + same number card is a topcard on a number pile
+                            // the card can be moved
+                            if (j <= 7 && sameValueSameColor(sourceTopCard, deckTopCard)) {
+                                canMove = true;
+                                break;
+                            }
+                            // Or if both not-color cards are have already been played the card can be moved
+                            nextCardsPlayed += nextCardsPlayed(sourceTopCard, deck);
+                            if (nextCardsPlayed == 2) {
+                                canMove = true;
+                                break;
+                            }
+                        }
+                        // If the card is safe to move add it to the candidates list.
+                        if (canMove) {
+                            candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // If there are candidates execute the move with the most downcards.
+            if (!candidates.isEmpty()) {
+                candidateSorter(candidates);
+                // Execute best candidate move.
+                // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
+            }
+        }
+
+        // Or if both not-color cards are have already been played
+        // Transfer card
+        // If yes transfer card
     }
 
     //TODO Person currently working:
@@ -218,23 +286,30 @@ public class AI {
     public void validateCandidates1() {
 
     }
+
     public void validateCandidates2() {
 
     }
+
     public void validateCandidates3() {
 
     }
+
     public void validateCandidates4() {
 
     }
+
     public void validateCandidates5() {
 
     }
+
     public void validateCandidates6() {
 
     }
 
-    private void candidateSorter(ArrayList<Move> candidates){
+    // Sorts a list of candidates in ascending order
+    // Author SIMON
+    private void candidateSorter(ArrayList<Move> candidates) {
         candidates.sort(
                 Comparator.comparing(
                         c -> c.getSourceDeck().getNumberOfFaceDownCards()
@@ -242,11 +317,45 @@ public class AI {
         );
     }
 
-    private boolean clearDeckOkay(Move move){
+    private boolean clearDeckOkay(Move move) {
         // 1. The calling function should  iterate through the list of candidates starting with the last index
         // 2. Before continuing the function should call clearDeckOkay(move) and ensure that the move is desirable
         // 3. If move is desirable call executeBestCandidate() and terminate iteration
         // 5. Else continue iteration to next candidate
         return false;
+    }
+
+    // Check if two cards have the same value and color (but not the same suit!)
+    // Author SIMON
+    private boolean sameValueSameColor(Card sourceTopCard, Card deckTopCard) {
+        if (
+                sourceTopCard.getValue() == deckTopCard.getValue() &&
+                        sourceTopCard.getSuit() != deckTopCard.getSuit() &&
+                        (
+                                (sourceTopCard.isBlack() && deckTopCard.isBlack()) ||
+                                        (sourceTopCard.isRed() && deckTopCard.isRed())
+                        )
+        ) {
+            return true;
+        } else return false;
+    }
+
+    // Check how many times the next playable card of a parameter card has been played in a deck
+    // Author SIMON
+    private int nextCardsPlayed(Card sourceTopCard, CardDeck deck) {
+        ArrayList<Card> faceUpCards = deck.getFaceUpCards();
+        int targetValue = sourceTopCard.getValue() - 1;
+        boolean targetBlack = !sourceTopCard.isBlack();
+        int numberOfCardsPlayed = 0;
+
+        for (Card card : faceUpCards) {
+            if (
+                    card.getValue() == targetValue &&
+                            card.isBlack() == targetBlack
+            ) {
+                numberOfCardsPlayed++;
+            }
+        }
+        return numberOfCardsPlayed;
     }
 }
