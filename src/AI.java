@@ -25,6 +25,8 @@ public class AI {
             ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
                 IF yes play then transfer card
                 THEN play king
+
+
      Search for any card that can be transfered to an Ace-stack
          Vet candidates
              Keep candidate
@@ -357,8 +359,44 @@ public class AI {
 
     //TODO Person currently working:
     // Search for a pile that can be smoothed
-    private void scanForMoveType5() {
+    //Author: ZAINAB
+    private void scanForMoveType5() throws Exception {
         //        EITHER a top card or a group of cards that can be transfered to make a pile smooth
+
+        
+        // Initialize list of candidate card.
+        ArrayList<Move> candidates = new ArrayList<>();
+        // Scan number piles
+
+        for (int i = 1; i <= 7; i++) {
+                // Number pile variables
+                CardDeck sourceDeck = this.board.getDeck(Integer.toString(i));
+                int sourceTopCardIndex = sourceDeck.getBottomFaceCardIndex();
+                Card sourceTopCard = sourceDeck.get(sourceTopCardIndex);
+                //smoothing is most important for numbers from 5-8
+                if( sourceTopCard.getValue() == 5 ||
+                    sourceTopCard.getValue() == 6 ||
+                    sourceTopCard.getValue() == 7 ||
+                    sourceTopCard.getValue() == 8 ){
+                    // Check if top-card can be placed anywhere in the piles
+                    for (int j = 1; j <= 7; j++) {
+
+                        CardDeck destinationDeck;
+                        destinationDeck = this.board.getDeck(Integer.toString(j));
+                        int destTopCardIndex = destinationDeck.getBottomFaceCardIndex();
+                        Card destTopCard = destinationDeck.get(destTopCardIndex);
+                        //card before the top card 
+                        Card predestTopCard = destinationDeck.get(destTopCardIndex-1);
+
+                        if (board.canMoveToNumberPile(sourceDeck, destinationDeck, sourceTopCardIndex)) {
+                            //check if move is smooth (compare source card with with it's next highest same-color partner in the column)
+                            if(sourceTopCard.getSuit() == predestTopCard.getSuit())
+                                candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
+                        }
+                }
+            }
+        }      
+        
     }
 
     //TODO Person currently working:
@@ -412,6 +450,7 @@ public class AI {
 
     private boolean clearDeckOkay(Move move) {
         // 1. The calling function should  iterate through the list of candidates starting with the last index
+
         // 2. Before continuing the function should call clearDeckOkay(move) and ensure that the move is desirable
         // 3. If move is desirable call executeBestCandidate() and terminate iteration
         // 5. Else continue iteration to next candidate
