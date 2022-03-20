@@ -209,7 +209,7 @@ public class Board {
 
     //Allows for referencing all the card decks by string. Useful for using the 7 piles in for loops where 'i'
     //is equal to the pile you want
-    public CardDeck getDeck(String input) throws Exception {
+    public CardDeck getDeck(String input) {
         return switch (input) {
             case "-1", "deck" -> initialDeck;
             case "12", "draw" -> drawDeck;
@@ -225,7 +225,7 @@ public class Board {
             case "9", "spades" -> spadesPile;
             case "10", "diamonds" -> diamondsPile;
             case "11", "clubs" -> clubsPile;
-            default -> throw new Exception("Typo in deck name \"" + input + "\"");
+            default -> null; //Asking for a non-existing pile will cause a null-pointer exception from this.
         };
     }
 

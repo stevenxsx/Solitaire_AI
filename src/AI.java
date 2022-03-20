@@ -184,6 +184,7 @@ public class AI {
     // Search for transferable face-up card(s) that will free a face-down card (the second to last card in pile is face-down)
     // Author SIMON
     private void scanForMoveType3() {
+        /*
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
 
@@ -255,6 +256,7 @@ public class AI {
                 // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
             }
         }
+        */
     }
 
     //TODO Person currently working: Simon
@@ -262,6 +264,7 @@ public class AI {
     // Play King if applicable
     // Author: SIMON
     private void scanForMoveType4() {
+        /*
         // Initialize variables
         ArrayList<CardDeck> candidateKings = new ArrayList<>();
 
@@ -355,12 +358,13 @@ public class AI {
         //
         //                IF yes play then transfer card
         //
+        */
     }
 
     //TODO Person currently working:
     // Search for a pile that can be smoothed
     //Author: ZAINAB
-    private void scanForMoveType5() throws Exception {
+    private void scanForMoveType5() {
         //        EITHER a top card or a group of cards that can be transfered to make a pile smooth
 
         
