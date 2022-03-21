@@ -119,7 +119,10 @@ public class AI {
                         case SPADES -> destinationDeck = board.spadesPile;
                         case DIAMONDS -> destinationDeck = board.diamondsPile;
                         case CLUBS -> destinationDeck = board.clubsPile;
-                        default -> destinationDeck = new CardDeck();
+                        default -> {
+                            destinationDeck = board.initialDeck;
+                            System.out.println("No pile found, defaulted to Initial Deck");
+                        }
                     }
                     candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
                 }
@@ -137,6 +140,7 @@ public class AI {
     // Search for Deuces in number piles and move best candidate to foundation
     // Author SIMON
     private void scanForMoveType2() {
+
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
 
@@ -184,6 +188,7 @@ public class AI {
     // Search for transferable face-up card(s) that will free a face-down card (the second to last card in pile is face-down)
     // Author SIMON
     private void scanForMoveType3() {
+        /*
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
 
@@ -212,7 +217,10 @@ public class AI {
                         case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
                         case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
                         case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
-                        default -> destinationDeck = new CardDeck();
+                        default -> {
+                            destinationDeck = board.initialDeck;
+                            System.out.println("Impossible pile error");
+                        }
                     }
                     if (board.canMoveToFoundation(sourceDeck, destinationDeck, sourceTopCardIndex)) {
                         // If yes we need to ensuer that the next card is protected.
@@ -221,7 +229,7 @@ public class AI {
                         int nextCardsPlayed = 0;
 
                         // Go through all the piles
-                        for (int j = 1; j <= 11; i++) {
+                        for (int j = 1; j <= 11; j++) {
                             CardDeck deck = this.board.getDeck(Integer.toString(i));
                             int deckTopCardIndex = deck.getBottomFaceCardIndex();
                             Card deckTopCard = deck.get(deckTopCardIndex);
@@ -255,6 +263,7 @@ public class AI {
                 // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
             }
         }
+        */
     }
 
     //TODO Person currently working: Simon
@@ -262,6 +271,7 @@ public class AI {
     // Play King if applicable
     // Author: SIMON
     private void scanForMoveType4() {
+        /*
         // Initialize variables
         ArrayList<CardDeck> candidateKings = new ArrayList<>();
 
@@ -355,12 +365,13 @@ public class AI {
         //
         //                IF yes play then transfer card
         //
+        */
     }
 
     //TODO Person currently working:
     // Search for a pile that can be smoothed
     //Author: ZAINAB
-    private void scanForMoveType5() throws Exception {
+    private void scanForMoveType5() {
         //        EITHER a top card or a group of cards that can be transfered to make a pile smooth
 
         

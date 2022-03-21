@@ -10,6 +10,11 @@ import java.util.Scanner;
 public class CardDeck {
 
     private final ArrayList<Card> cards = new ArrayList<>(52);
+    private final String name;
+
+    public CardDeck(String name) {
+        this.name = name;
+    }
 
     public void populate() throws IOException {
         File file = new File("./resources/cards.txt");
@@ -63,9 +68,9 @@ public class CardDeck {
         }
     }
 
-    public String toString(String deckName) {
+    public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(deckName).append(" includes the following:\n");
+        s.append(name).append(" includes the following:\n");
         for (Card card : cards) {
             s.append(card.toString()).append(" - Face Up -> ").append(card.isFaceUp()).append("\n");
         }

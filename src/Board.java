@@ -1,23 +1,59 @@
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.StringTokenizer;
 
 public class Board {
 
     //All board operations and card movement go in this class.
 
-    CardDeck initialDeck = new CardDeck(); //id = "deck"
-    CardDeck drawDeck = new CardDeck(); // "draw"
-    CardDeck drawDiscard = new CardDeck(); // "discard"
-    CardDeck pile1 = new CardDeck(); // "1"
-    CardDeck pile2 = new CardDeck(); // "2"
-    CardDeck pile3 = new CardDeck(); // "3"
-    CardDeck pile4 = new CardDeck(); // "4"
-    CardDeck pile5 = new CardDeck(); // "5"
-    CardDeck pile6 = new CardDeck(); // "6"
-    CardDeck pile7 = new CardDeck(); // "7"
-    CardDeck heartsPile = new CardDeck(); // "hearts"
-    CardDeck spadesPile = new CardDeck(); // "spades"
-    CardDeck diamondsPile = new CardDeck(); // "diamonds"
-    CardDeck clubsPile = new CardDeck(); // "clubs"
+    CardDeck initialDeck = new CardDeck("Initial Deck"); //id = "deck"
+    CardDeck drawDeck = new CardDeck("Draw Pile"); // "draw"
+    CardDeck drawDiscard = new CardDeck("Discard Pile"); // "discard"
+    CardDeck pile1 = new CardDeck("Pile 1"); // "1"
+    CardDeck pile2 = new CardDeck("Pile 2"); // "2"
+    CardDeck pile3 = new CardDeck("Pile 3"); // "3"
+    CardDeck pile4 = new CardDeck("Pile 4"); // "4"
+    CardDeck pile5 = new CardDeck("Pile 5"); // "5"
+    CardDeck pile6 = new CardDeck("Pile 6"); // "6"
+    CardDeck pile7 = new CardDeck("Pile 7"); // "7"
+    CardDeck heartsPile = new CardDeck("Hearts Foundation"); // "hearts"
+    CardDeck spadesPile = new CardDeck("Spades Foundation"); // "spades"
+    CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
+    CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
+
+    //Cheatsheet -> piles 1-7, foundations 8-11, draw 12, discard 13
+    public void parseInput(String input) {
+        switch (input) {
+            case "goodbye": {return;}
+            case "shuffle": {drawDeck.shuffleDeck();break;}
+            case "draw": {drawCardMove();break;}
+            default: {StringTokenizer st = new StringTokenizer(input," ");
+                String s = st.nextToken();
+                String d = st.nextToken();
+                String i = st.nextToken();
+                if (i.equals("last")) {
+                    i = String.valueOf(getDeck(s).size()-1);
+                }
+                Move move = new Move(getDeck(s),getDeck(d),Integer.parseInt(i));
+                System.out.println("Move is: " + move);
+                attemptMove(move);}
+        }
+
+    }
+
+    private void drawCardMove() {
+
+    }
+
+    //Flips newly revealed cards to face-up.
+    public void updateBoardState() {
+        for (int i = 1; i < 8; i++) {
+            CardDeck cd = getDeck(Integer.toString(i));
+            if (cd.size() > 0) {
+                cd.get(cd.size()-1).setFaceUp(true);
+            }
+        }
+    }
 
     public boolean attemptMove(Move move) {
         CardDeck s = move.getSourceDeck();
@@ -67,7 +103,7 @@ public class Board {
             }
         }
         //If the move wasnt legal, and wasnt executed
-        System.out.println("Illegal move sent to attemptMove():\nSource: " + s.toString() + "Destination: " + d.toString() + "Index: " + x);
+        System.out.println("Illegal move sent to attemptMove() -> Source: " + s.toString() + " Destination: " + d.toString() + " Index: " + x);
         return false;
     }
 
@@ -77,6 +113,15 @@ public class Board {
         boolean suit = false;
         boolean isFaceUp;
         boolean legalNumberOfCards = true;
+        //Checks for attempting a move of king to empty pile.
+        if (destination.size() == 0 ) {
+            if (source.get(index).getValue() == 13) {
+                if (source.get(index).isFaceUp()) {
+                    return true;
+                }
+            }
+            else return false;
+        }
         //Source number value is 1 less than destination number.
         if (destination.get(destination.size() - 1).getValue() - source.get(index).getValue() == 1) {
             value = true;
@@ -169,7 +214,8 @@ public class Board {
     }
 
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
-        if (source.get(index).isFaceUp() && destination.get(destination.size() - 1).isFaceUp()) {
+
+        if (source.get(index).isFaceUp()) {
             return true;
         } else {
             System.out.println("Attempted to move a face-down card.");
@@ -209,7 +255,7 @@ public class Board {
 
     //Allows for referencing all the card decks by string. Useful for using the 7 piles in for loops where 'i'
     //is equal to the pile you want
-    public CardDeck getDeck(String input) throws Exception {
+    public CardDeck getDeck(String input) {
         return switch (input) {
             case "-1", "deck" -> initialDeck;
             case "12", "draw" -> drawDeck;
@@ -225,8 +271,26 @@ public class Board {
             case "9", "spades" -> spadesPile;
             case "10", "diamonds" -> diamondsPile;
             case "11", "clubs" -> clubsPile;
-            default -> throw new Exception("Typo in deck name \"" + input + "\"");
+            default -> null; //Asking for a non-existing pile will cause a null-pointer exception from this.
         };
+    }
+
+    public String getDeckName(CardDeck deck) {
+        if (deck.equals(initialDeck)) {return "Initial Deck";}
+        else if (deck.equals(drawDeck)) {return "Draw Pile";}
+        else if (deck.equals(drawDiscard)) {return "Discard Pile";}
+        else if (deck.equals(pile1)) {return "Pile 1";}
+        else if (deck.equals(pile2)) {return "Pile 2";}
+        else if (deck.equals(pile3)) {return "Pile 3";}
+        else if (deck.equals(pile4)) {return "Pile 4";}
+        else if (deck.equals(pile5)) {return "Pile 5";}
+        else if (deck.equals(pile6)) {return "Pile 6";}
+        else if (deck.equals(pile7)) {return "Pile 7";}
+        else if (deck.equals(heartsPile)) {return "Hearts Foundation";}
+        else if (deck.equals(spadesPile)) {return "Spades Foundation";}
+        else if (deck.equals(diamondsPile)) {return "Diamonds Foundation";}
+        else if (deck.equals(clubsPile)) {return "Clubs Foundation";}
+        else return "IMPOSSIBLE PILE (error)";
     }
 
     //Creates the board using the initial card deck. Make sure the deck is shuffled.
@@ -245,24 +309,8 @@ public class Board {
         String tab = "\t";
         String dtab = "\t\t";
 
-        /*String sb = initialDeck.toString("Initial") +
-                drawDeck.toString("Draw") +
-                drawDiscard.toString("Discard") +
-                pile1.toString("Pile1") +
-                pile2.toString("Pile2") +
-                pile3.toString("Pile") +
-                pile4.toString("Pile4") +
-                pile5.toString("Pile5") +
-                pile6.toString("Pile6") +
-                pile7.toString("Pile7") +
-                heartsPile.toString("Hearts") +
-                spadesPile.toString("Spades") +
-                diamondsPile.toString("Diamonds") +
-                clubsPile.toString("Clubs");
-        System.out.println(sb);*/
-
         // Create new super print method with formatting
-        System.out.println("DR" + tab + drawDeck.printCard(drawDeck.size()-1) + dtab + "F1" + tab + "F2" + tab + "F3" + tab + "F4");
+        System.out.println("DR" + tab + drawDeck.printCard(drawDeck.size()-1) + dtab + "FH" + tab + "FS" + tab + "FD" + tab + "FC");
         System.out.println("DI" + tab + drawDiscard.printCard(drawDiscard.size()-1) + dtab +heartsPile.printCard(heartsPile.size() - 1) + tab + spadesPile.printCard(spadesPile.size() - 1)
                 + tab + diamondsPile.printCard(diamondsPile.size() - 1) + tab + clubsPile.printCard(clubsPile.size() - 1));
         System.out.println("P1  P2  P3  P4  P5  P6  P7");
