@@ -1,9 +1,10 @@
-import Exceptions.NotEnoughCardsException;
-
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+/** Author STEVEN
+ *  Creates a game object that is responsible for the general game loop (taking input/calling the AI). Terminates
+ *  when given the right command or the game is won/lost.
+ */
 public class Game {
 
 
@@ -19,6 +20,8 @@ public class Game {
         do {
             board.updateBoardState();
             board.printBoard();
+            System.out.println(board.getDeck("draw"));
+            System.out.println(board.getDeck("discard"));
             System.out.println("Ready for Input");
             input = sc.nextLine();
             board.parseInput(input);

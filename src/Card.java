@@ -1,3 +1,6 @@
+/** Author STEVEN
+ * Card object to be used in Arraylists representing the board.
+ */
 public class Card {
 
     private final Suit suit;

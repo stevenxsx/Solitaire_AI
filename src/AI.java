@@ -100,7 +100,7 @@ public class AI {
     }
 
     // Search for Aces in number piles and move best candidate to foundation
-    // Author SIMON
+    // Author SIMON + STEVEN
     private void scanForMoveType1() {
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
@@ -254,7 +254,7 @@ public class AI {
             // If clearing the deck allows for a legal king move according to our strategy we are happy
             if (clearIsLegal(kings)){
                 addCandidateMoves(candidates,4);
-            };
+            }
         }
     }
 
@@ -452,16 +452,12 @@ public class AI {
     // Check if two cards have the same value and color (but not the same suit!)
     // Author SIMON
     private boolean sameValueSameColor(Card sourceTopCard, Card deckTopCard) {
-        if (
-                sourceTopCard.getValue() == deckTopCard.getValue() &&
-                        sourceTopCard.getSuit() != deckTopCard.getSuit() &&
-                        (
-                                (sourceTopCard.isBlack() && deckTopCard.isBlack()) ||
-                                        (sourceTopCard.isRed() && deckTopCard.isRed())
-                        )
-        ) {
-            return true;
-        } else return false;
+        return sourceTopCard.getValue() == deckTopCard.getValue() &&
+                sourceTopCard.getSuit() != deckTopCard.getSuit() &&
+                (
+                        (sourceTopCard.isBlack() && deckTopCard.isBlack()) ||
+                                (sourceTopCard.isRed() && deckTopCard.isRed())
+                );
     }
 
     // Check how many times the next playable card of a parameter card has been played in a deck
@@ -487,7 +483,7 @@ public class AI {
         return deck.getNumberOfFaceDownCards() == 0;
     }
 
-    ;
+
 
     private ArrayList<Move> getTransferCandidates(CardDeck sourceDeck, int index) {
         // Check if top-card can be placed anywhere in the piles

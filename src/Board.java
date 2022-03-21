@@ -5,8 +5,7 @@ import java.util.StringTokenizer;
 
 public class Board {
 
-    //All board operations and card movement go in this class.
-
+    //Initialize all the piles contained in the board
     CardDeck initialDeck = new CardDeck("Initial Deck"); //id = "deck"
     CardDeck drawDeck = new CardDeck("Draw Pile"); // "draw"
     CardDeck drawDiscard = new CardDeck("Discard Pile"); // "discard"
@@ -24,13 +23,17 @@ public class Board {
 
     AI ai = new AI(this); //Initialize the AI inside the board
 
-    //Cheatsheet -> piles 1-7, foundations 8-11, draw 12, discard 13
+    /** Author STEVEN
+     *  Parses text input for manual use of the program
+     *  Cheatsheet -> piles 1-7, foundations 8-11, draw 12, discard 13
+     */
     public void parseInput(String input) throws Exception {
         switch (input) {
             case "goodbye": {return;}
             case "shuffle": {drawDeck.shuffleDeck();break;}
             case "draw": {attemptMove(new Move(drawDeck,drawDiscard, drawDeck.size()-1));break;}
             case "ai": {executeAI();break;}
+            case "free 5": {drawUntilCardAvailable(5);break;}
             case "restart": {
                 initialDeck.clearDeck();
                 drawDeck.clearDeck();
@@ -69,7 +72,9 @@ public class Board {
         ai.executeTurn();
     }
 
-    //Flips newly revealed cards to face-up.
+    /** Author STEVEN
+     Flips newly revealed cards to face-up.
+     */
     public void updateBoardState() {
         for (int i = 1; i < 8; i++) {
             CardDeck cd = getDeck(Integer.toString(i));
@@ -83,7 +88,19 @@ public class Board {
             }
         }
     }
+    /** Author STEVEN
+     Moves a card given by an index from anywhere in the draw pile to the top of the discard pile naturally
+     */
+    public void drawUntilCardAvailable(int index) {
+        int num = drawDeck.size() - index;
+        for (int i = 0; i < num; i++) {
+            drawCard(drawDeck,drawDiscard);
+        }
+    }
 
+    /** Author STEVEN
+     * Given a move object, checks the source & destination piles and attempts to move it there.
+     */
     public boolean attemptMove(Move move) {
         CardDeck s = move.getSourceDeck();
         CardDeck d = move.getDestinationDeck();
@@ -112,7 +129,7 @@ public class Board {
         }
         //Attempts to move card from Draw to Discard
         else if (isDrawPile(s) && isDiscardPile(d)) {
-            drawCard(s,d,x);
+            drawCard(s,d);
             return true;
         }
         //Attempts to move card from Discard to Number pile
@@ -134,7 +151,9 @@ public class Board {
         return false;
     }
 
-    // Check if the index card in the source pile is allowed to be moved to the destination number pile.
+    /** Author STEVEN
+     * Check if the index card in the source pile is allowed to be moved to the destination number pile.
+     */
     public boolean canMoveToNumberPile(CardDeck source, CardDeck destination, int index) {
         boolean value = false;
         boolean suit = false;
@@ -167,7 +186,9 @@ public class Board {
         return (value && suit && isFaceUp && legalNumberOfCards);
     }
 
-    // Check if the index card in the source pile is allowed to be moved to the destination foundation pile.
+    /** Author STEVEN
+     * Check if the index card in the source pile is allowed to be moved to the destination foundation pile.
+     */
     public boolean canMoveToFoundation(CardDeck source, CardDeck destination, int index) {
         boolean legalIndex = false;
         Suit suit = source.get(index).getSuit();
@@ -204,10 +225,12 @@ public class Board {
         return (legalIndex && matchingSuit && matchingValue && isFaceUp);
     }
 
+    /** Author STEVEN
+     * Simply moves a card or several from 1 deck to another. Checks for legality of moves must be done before calling
+     * this function. The function moves every card from the given index to the end of the list, in order.
+     */
     public void moveCardDeckToDeck(CardDeck source, CardDeck destination, int index, boolean flipFaceUp) {
 
-        //forced move -> no check to see if its legal
-        //Moves every card from the index to the end in order of index first
         while (source.size() > index) {
             destination.add(source.get(index));
             source.remove(index);
@@ -215,7 +238,11 @@ public class Board {
         }
     }
 
-    public void drawCard(CardDeck source, CardDeck destination, int index) {
+    /** Author ZAINAB + STEVEN
+     *  Draws a card from the deck and puts it in the discard pile face-up. If the draw pile is empty, fills the draw
+     *  pile with the discard pile, retaining their natural order before drawing a card again.
+     */
+    public void drawCard(CardDeck source, CardDeck destination) {
         int n = destination.size()-1;
         if ( source.size() == 0 ){
             while(destination.size() != 0){
@@ -225,12 +252,12 @@ public class Board {
                 destination.remove(n);
                 n--;
             }
-            drawCard(source, destination, source.size()-1);
+            drawCard(source, destination);
 
         }
         else{
-            destination.add(source.get(index));
-            source.remove(index);
+            destination.add(source.get(source.size()-1));
+            source.remove(source.size()-1);
 
 
             for (int i = 0; i <= destination.size()-1 ; i++){
@@ -243,16 +270,17 @@ public class Board {
 
     }
 
+    /** Author STEVEN
+     * Checks if a given card is face-up, allowing it to be moved from its pile.
+     */
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
-
-        if (source.get(index).isFaceUp()) {
-            return true;
-        } else {
-            System.out.println("Attempted to move a face-down card.");
-            return false;
-        }
+        return source.get(index).isFaceUp();
     }
 
+    /** Author STEVEN
+     *  Checks if a move is legal purely based on which pile is being transferred from as well as how many cards are
+     *  being moved.
+     */
     public boolean numberOfCardsMovedIsLegal(CardDeck source, CardDeck destination, int index) {
         boolean isLegal = false;
         //If moving 1 card, move is legal
@@ -266,25 +294,36 @@ public class Board {
         return isLegal;
     }
 
+    /** Author STEVEN
+     * Helper function for determining pile type.
+     */
     public boolean isNumberPile(CardDeck source) {
         return source == pile1 || source == pile2 || source == pile3 || source == pile4 || source == pile5 || source == pile6 || source == pile7;
     }
-
+    /** Author STEVEN
+     * Helper function for determining pile type.
+     */
     public boolean isDiscardPile(CardDeck source) {
         return source == drawDiscard;
     }
-
+    /** Author STEVEN
+     * Helper function for determining pile type.
+     */
     public boolean isDrawPile(CardDeck source) {
         return source == drawDeck;
     }
-
+    /** Author STEVEN
+     * Helper function for determining pile type.
+     */
     public boolean isFoundationPile(CardDeck source) {
         return source == heartsPile || source == spadesPile || source == diamondsPile || source == clubsPile;
     }
 
 
-    //Allows for referencing all the card decks by string. Useful for using the 7 piles in for loops where 'i'
-    //is equal to the pile you want
+    /** Author STEVEN
+     * Allows for refering a deck by its string value. Useful for looping through the 7 number piles where the loop
+     * index corresponds to the pile number.
+     */
     public CardDeck getDeck(String input) {
         return switch (input) {
             case "-1", "deck" -> initialDeck;
@@ -305,6 +344,9 @@ public class Board {
         };
     }
 
+    /** Author STEVEN
+     * Returns a nicer representation of deck names for use in TUI or debugging.
+     */
     public String getDeckName(CardDeck deck) {
         if (deck.equals(initialDeck)) {return "Initial Deck";}
         else if (deck.equals(drawDeck)) {return "Draw Pile";}
@@ -323,8 +365,10 @@ public class Board {
         else return "IMPOSSIBLE PILE (error)";
     }
 
-    //Creates the board using the initial card deck. Make sure the deck is shuffled.
-    public void initialPopulateBoard() throws Exception {
+    /** Author STEVEN
+     * Creates the board using the initial card deck. Make sure the deck is shuffled beforehand.
+     */
+    public void initialPopulateBoard() {
         for (int i = 1; i <= 7; i++) {
             //Fills each card pile with 1-7 cards, respectively. Then it flips the last card face up.
             moveCardDeckToDeck(initialDeck, getDeck(Integer.toString(i)),
@@ -335,6 +379,9 @@ public class Board {
         moveCardDeckToDeck(initialDeck, drawDeck, 0, false);
     }
 
+    /** Author STEVEN
+     * Prints out a TUI representation of the board.
+     */
     public void printBoard() {
         String tab = "\t";
         String dtab = "\t\t";
@@ -357,6 +404,9 @@ public class Board {
 
     }
 
+    /** Author STEVEN
+     * Returns the length value of the longest number pile, for use in determining the size of the TUI.
+     */
     public int longestNumberPileLength() {
         int l = 0;
         ArrayList<CardDeck> piles = new ArrayList<>();

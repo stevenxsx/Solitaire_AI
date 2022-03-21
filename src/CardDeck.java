@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+/** Author STEVEN
+ * CardDeck object that holds Card objects. Lots of methods for indirect manipulation of the underlying ArrayList as
+ * well as various printing, parsing, etc.
+ */
 public class CardDeck {
 
     private final ArrayList<Card> cards = new ArrayList<>(52);
