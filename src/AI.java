@@ -320,7 +320,39 @@ public class AI {
 
     //TODO Person currently working:
     //  Search for cards that can be played from the Deck then play them
+    // Author : Zainab - IN PROGRESS
     private void scanForMoveType6() {
+        /*
+
+        // Initialize list of candidate card.
+        ArrayList<Move> candidates = new ArrayList<>();
+
+        // Number pile variables
+        CardDeck sourceDeck = this.board.getDeck("12");
+
+        for (int i = 0; i <= sourceDeck.size()-1; i++) {
+
+
+                // Check if top-card can be placed anywhere in the piles
+                for (int j = 1; j <= 7; j++) {
+
+                    CardDeck destinationDeck;
+                    destinationDeck = this.board.getDeck(Integer.toString(j));
+                    int destTopCardIndex = destinationDeck.getBottomFaceCardIndex();
+                    Card destTopCard = destinationDeck.get(destTopCardIndex);
+
+                    if (board.canMoveToNumberPile(sourceDeck, destinationDeck, i)) {
+                        candidates.add((new Move(sourceDeck, destinationDeck, i)));
+                    }
+                }
+        }
+        if (!candidates.isEmpty()) {
+            candidateSorter(candidates);
+            // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
+
+        }*/
+
+
 
     }
 
