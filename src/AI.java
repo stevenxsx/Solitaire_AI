@@ -140,6 +140,7 @@ public class AI {
     // Search for Deuces in number piles and move best candidate to foundation
     // Author SIMON
     private void scanForMoveType2() {
+
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
 
@@ -216,7 +217,10 @@ public class AI {
                         case SPADES -> destinationDeck = this.board.getDeck("spadesPile");
                         case DIAMONDS -> destinationDeck = this.board.getDeck("diamondsPile");
                         case CLUBS -> destinationDeck = this.board.getDeck("clubsPile");
-                        default -> destinationDeck = new CardDeck();
+                        default -> {
+                            destinationDeck = board.initialDeck;
+                            System.out.println("Impossible pile error");
+                        }
                     }
                     if (board.canMoveToFoundation(sourceDeck, destinationDeck, sourceTopCardIndex)) {
                         // If yes we need to ensuer that the next card is protected.
@@ -225,7 +229,7 @@ public class AI {
                         int nextCardsPlayed = 0;
 
                         // Go through all the piles
-                        for (int j = 1; j <= 11; i++) {
+                        for (int j = 1; j <= 11; j++) {
                             CardDeck deck = this.board.getDeck(Integer.toString(i));
                             int deckTopCardIndex = deck.getBottomFaceCardIndex();
                             Card deckTopCard = deck.get(deckTopCardIndex);

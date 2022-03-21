@@ -18,6 +18,7 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         String input;
         do {
+            board.updateBoardState();
             board.printBoard();
             System.out.println("Ready for Input");
             input = sc.nextLine();

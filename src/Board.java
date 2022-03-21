@@ -26,6 +26,7 @@ public class Board {
         switch (input) {
             case "goodbye": {return;}
             case "shuffle": {drawDeck.shuffleDeck();break;}
+            case "draw": {drawCardMove();break;}
             default: {StringTokenizer st = new StringTokenizer(input," ");
                 String s = st.nextToken();
                 String d = st.nextToken();
@@ -38,6 +39,20 @@ public class Board {
                 attemptMove(move);}
         }
 
+    }
+
+    private void drawCardMove() {
+
+    }
+
+    //Flips newly revealed cards to face-up.
+    public void updateBoardState() {
+        for (int i = 1; i < 8; i++) {
+            CardDeck cd = getDeck(Integer.toString(i));
+            if (cd.size() > 0) {
+                cd.get(cd.size()-1).setFaceUp(true);
+            }
+        }
     }
 
     public boolean attemptMove(Move move) {
