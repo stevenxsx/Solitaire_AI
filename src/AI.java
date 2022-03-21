@@ -119,7 +119,10 @@ public class AI {
                         case SPADES -> destinationDeck = board.spadesPile;
                         case DIAMONDS -> destinationDeck = board.diamondsPile;
                         case CLUBS -> destinationDeck = board.clubsPile;
-                        default -> destinationDeck = new CardDeck();
+                        default -> {
+                            destinationDeck = board.initialDeck;
+                            System.out.println("No pile found, defaulted to Initial Deck");
+                        }
                     }
                     candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
                 }

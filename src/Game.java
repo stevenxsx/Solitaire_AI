@@ -1,6 +1,8 @@
 import Exceptions.NotEnoughCardsException;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class Game {
 
@@ -11,7 +13,16 @@ public class Game {
         board.initialDeck.populate();
         board.initialDeck.shuffleDeck();
         board.initialPopulateBoard();
-        board.printBoard();
+        //board.printBoard();
+
+        Scanner sc = new Scanner(System.in);
+        String input;
+        do {
+            board.printBoard();
+            System.out.println("Ready for Input");
+            input = sc.nextLine();
+            board.parseInput(input);
+        } while (!Objects.equals(input, "goodbye"));
         /*do {
             ai.executeTurn();
             if (ai.gameIsWon) {

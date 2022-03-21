@@ -32,4 +32,8 @@ public class Move {
     public int getIndex() {
         return index;
     }
+
+    public String toString() {
+        return "S: " + sourceDeck + " D: " + destinationDeck + " I: " + index;
+    }
 }
