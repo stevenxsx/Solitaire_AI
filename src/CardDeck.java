@@ -121,7 +121,12 @@ public class CardDeck {
         int number = 0;
         for (Card card : this.cards){
             if(!card.isFaceUp()){
+
+                System.out.printf("Debug - " + card + " is face down");
+
                 number++;
+
+                System.out.println("Debug - Number of face down cards is " +number);
             }
         }
         return number;
@@ -151,6 +156,17 @@ public class CardDeck {
     // Call this function to check if popping the topcard will free a downcard
     // Author: SIMON
     public boolean canFreeDownCard(){
-        return !this.cards.get(getBottomFaceCardIndex()-1).isFaceUp();
+
+        return !(getNumberOfFaceDownCards() == 0);
+    }
+
+    public ArrayList<Card> getAllCardsOfValue(int cardValue){
+        ArrayList<Card> cards = new ArrayList<>();
+        for(Card card : this.cards){
+            if(card.getValue() == cardValue){
+                cards.add(card);
+            }
+        }
+        return cards;
     }
 }

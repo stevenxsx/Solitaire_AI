@@ -48,6 +48,11 @@ public class Board {
                 cd.get(cd.size()-1).setFaceUp(true);
             }
         }
+        if (drawDiscard.size() > 0) {
+            if (!drawDiscard.get(drawDiscard.size() - 1).isFaceUp()) {
+                drawDiscard.get(drawDiscard.size() - 1).setFaceUp(true);
+            }
+        }
     }
 
     public boolean attemptMove(Move move) {
@@ -120,7 +125,7 @@ public class Board {
             value = true;
         }
         //Source color is opposite of destination color
-        if ((source.get(index).isRed() && destination.get(destination.size() - 1).isBlack()) || (source.get(index).isBlack() && source.get(index).isRed())) {
+        if ((source.get(index).isRed() && destination.get(destination.size() - 1).isBlack()) || (source.get(index).isBlack() && destination.get(destination.size()-1).isRed())) {
             suit = true;
         }
         //Both cards must be face-up for the move to make any sense
@@ -129,7 +134,7 @@ public class Board {
         if (source.size() - 1 > index && !isNumberPile(source)) {
             legalNumberOfCards = false;
         }
-
+        System.out.println("canMoveToNumberPile boolean results -> " + value + " " + suit + " " + isFaceUp + " " + legalNumberOfCards);
         return (value && suit && isFaceUp && legalNumberOfCards);
     }
 

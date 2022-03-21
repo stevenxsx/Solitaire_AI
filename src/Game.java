@@ -29,7 +29,7 @@ public class Game {
             if (ai.gameIsWon) {
                 winGame();
             }
-        } while (!ai.gameIsLost);*/
+        } while (!ai.gameIsLost);
 
     }
 
