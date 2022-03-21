@@ -173,6 +173,9 @@ public class Board {
             if (source.get(index).isFaceUp()) {
                 return true;
             }
+            else if (!source.get(index).isFaceUp()) {
+                return false;
+            }
         }
         if (source.get(index).isFaceUp() && destination.get(destination.size() - 1).isFaceUp()) {
             return true;
