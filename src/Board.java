@@ -1,4 +1,6 @@
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Board {
@@ -20,12 +22,35 @@ public class Board {
     CardDeck diamondsPile = new CardDeck("Diamonds Foundation"); // "diamonds"
     CardDeck clubsPile = new CardDeck("Clubs Foundation"); // "clubs"
 
+    AI ai = new AI(this); //Initialize the AI inside the board
+
     //Cheatsheet -> piles 1-7, foundations 8-11, draw 12, discard 13
-    public void parseInput(String input) {
+    public void parseInput(String input) throws Exception {
         switch (input) {
             case "goodbye": {return;}
             case "shuffle": {drawDeck.shuffleDeck();break;}
             case "draw": {attemptMove(new Move(drawDeck,drawDiscard, drawDeck.size()-1));break;}
+            case "ai": {executeAI();break;}
+            case "restart": {
+                initialDeck.clearDeck();
+                drawDeck.clearDeck();
+                drawDiscard.clearDeck();
+                pile1.clearDeck();
+                pile2.clearDeck();
+                pile3.clearDeck();
+                pile4.clearDeck();
+                pile5.clearDeck();
+                pile6.clearDeck();
+                pile7.clearDeck();
+                heartsPile.clearDeck();
+                spadesPile.clearDeck();
+                diamondsPile.clearDeck();
+                clubsPile.clearDeck();
+                this.initialDeck.populate();
+                this.initialDeck.shuffleDeck();
+                this.initialPopulateBoard();
+                break;
+            }
             default: {StringTokenizer st = new StringTokenizer(input," ");
                 String s = st.nextToken();
                 String d = st.nextToken();
@@ -38,6 +63,10 @@ public class Board {
                 attemptMove(move);}
         }
 
+    }
+
+    public void executeAI() {
+        ai.executeTurn();
     }
 
     //Flips newly revealed cards to face-up.
@@ -134,7 +163,7 @@ public class Board {
         if (source.size() - 1 > index && !isNumberPile(source)) {
             legalNumberOfCards = false;
         }
-        System.out.println("canMoveToNumberPile boolean results -> " + value + " " + suit + " " + isFaceUp + " " + legalNumberOfCards);
+        //System.out.println("canMoveToNumberPile boolean results -> " + value + " " + suit + " " + isFaceUp + " " + legalNumberOfCards);
         return (value && suit && isFaceUp && legalNumberOfCards);
     }
 

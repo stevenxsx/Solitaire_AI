@@ -9,7 +9,6 @@ public class Game {
 
     public void startGame() throws Exception {
         Board board = new Board();
-        AI ai = new AI(board);
         board.initialDeck.populate();
         board.initialDeck.shuffleDeck();
         board.initialPopulateBoard();
@@ -25,11 +24,11 @@ public class Game {
             board.parseInput(input);
         } while (!Objects.equals(input, "goodbye"));
         /*do {
-            ai.executeTurn();
-            if (ai.gameIsWon) {
+            board.executeAI();
+            if (board.ai.gameIsWon) {
                 winGame();
             }
-        } while (!ai.gameIsLost);
+        } while (!board.ai.gameIsLost);*/
 
     }
 

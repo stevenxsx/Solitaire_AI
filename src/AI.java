@@ -13,69 +13,81 @@ public class AI {
     }
 
 
-    /**
-     * AI functions
-     * All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
-     * Search for Ace in number piles and move to foundation
-     * Search for Deuce in number piles and move to foundation
-     * Search for transferable face-up card(s) that will free a face-down card
-     * If search returns multiple options select pile with most face-down cards
-     * Search for transferable face-up card(s) that will clear a space
-     * IF yes is a king playable?
-     * IF yes can playing the king free up a downcard? (i.e. allow transfer of a queen, or king is bottom face-up card)
-     * ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
-     * IF yes play then transfer card
-     * THEN play king
-     * <p>
-     * <p>
-     * Search for any card that can be transfered to an Ace-stack
-     * Vet candidates
-     * Keep candidate
-     * IF its same color twin is on the board (e.g. keep 3D if 3H is in play)
-     * OR if it's not-same color successors are on the board (e.g. keep 3D if both 2C & 2S are in play)
-     * AND the play will free a downcard
-     * Nice to have smarty pants AI option: OR if the subsequent play will free a downcard
-     * OR it will clear a spot for a waiting king (remember to call "should I clear a space?" function)
-     * Search for a pile that can be smoothed
-     * EITHER a top card or a group of cards that can be transfered to make a pile smooth
-     * Search for cards that can be played from the Deck then play them
-     * Another nice to have smarty pants AI option: Try to transfer cards/piles to open up playing cards from the dack
-     * IF no plays can be made, flip the table and rage quit!
-     * <p>
-     * In a given turn, the AI will for every type of move in the hierarchy scan the whole board for moves of that type.
-     * If a move or more are found, they will be added to a 'candidate list' that will be processed after all moves of
-     * that type have been found, with the process eliminating the sub-optimal moves in favor of the best one. If no
-     * moves of a given type were found, the algorithm will proceed to the next type of move. The hierarchy should
-     * therefore include a scan-type function and validation-type function for every type of move. Lastly, some function
-     * should be created to handle no possible moves, ending game, etc.
-     * <p>
-     * ExecuteTurn()
-     * ScanForMoveType1()
-     * AddCandidatesToList(Move object)
-     * ValidateCandidates(ListOfMoves)
-     * ExecuteBestCandidate(Move)
-     * call ScanForMoveType2()
-     * <p>
-     * repeat sequence for moveTypes all the way down
-     * <p>
-     * NoMovesFound()
-     * EndGame()
-     **/
+    /* AI functions
+     All functions must find all candidate cards that apply, then transfer the candidate from the pile with the most downcards
+     Search for Ace in number piles and move to foundation
+     Search for Deuce in number piles and move to foundation
+     Search for transferable face-up card(s) that will free a face-down card
+         If search returns multiple options select pile with most face-down cards
+     Search for transferable face-up card(s) that will clear a space
+        IF yes is a king playable?
+            IF yes can playing the king free up a downcard? (i.e. allow transfer of a queen)
+            ELSE IF will this play benefit the pile with most downcards? (i.e. same color)
+                IF yes play then transfer card
+                THEN play king
+
+
+     Search for any card that can be transfered to an Ace-stack
+         Vet candidates
+             Keep candidate
+                 IF its same color twin is on the board (e.g. keep 3D if 3H is in play)
+                 OR if it's not-same color successors are on the board (e.g. keep 3D if both 2C & 2S are in play)
+                     AND the play will free a downcard
+                     Nice to have smarty pants AI option: OR if the subsequent play will free a downcard
+                     OR it will clear a spot for a waiting king (remember to call "should I clear a space?" function)
+     Search for a pile that can be smoothed
+        EITHER a top card or a group of cards that can be transfered to make a pile smooth
+    Search for cards that can be played from the Deck then play them
+    Another nice to have smarty pants AI option: Try to transfer cards/piles to open up playing cards from the dack
+    IF no plays can be made, flip the table and rage quit!
+
+    In a given turn, the AI will for every type of move in the hierarchy scan the whole board for moves of that type.
+     If a move or more are found, they will be added to a 'candidate list' that will be processed after all moves of
+     that type have been found, with the process eliminating the sub-optimal moves in favor of the best one. If no
+     moves of a given type were found, the algorithm will proceed to the next type of move. The hierarchy should
+     therefore include a scan-type function and validation-type function for every type of move. Lastly, some function
+     should be created to handle no possible moves, ending game, etc.
+
+     ExecuteTurn()
+        ScanForMoveType1()
+            AddCandidatesToList(Move object)
+        ValidateCandidates(ListOfMoves)
+            ExecuteBestCandidate(Move)
+        call ScanForMoveType2()
+
+     repeat sequence for moveTypes all the way down
+
+     NoMovesFound()
+        EndGame()
+
+    */
 
 
     public void executeTurn() {
-
-        //needs to break the sequence if a move is executed. check between every type of move.
+        //remove all elements from previous AI call, if any.
+        movesList.clear();
         scanForMoveType1();
         scanForMoveType2();
         scanForMoveType3();
         scanForMoveType4();
-        //scanForMoveType5();
-        //scanForMoveType6();
-        //scanForMoveType7();
-        checkIfGameIsWon();
-        noMovesFound();
+        scanForMoveType5();
+        scanForMoveType6();
+        scanForMoveType7();
+        if (!movesList.isEmpty()) {
+            board.attemptMove(movesList.get(0));
+        }
+        else {
+            System.out.println("no moves found");
+        }
+    }
 
+    public void addCandidateMoves(ArrayList<Move> candidates, int moveType) {
+        // If there are candidates, sort them and add to the list
+        if (!candidates.isEmpty()) {
+            candidateSorter(candidates);
+            movesList.addAll(candidates);
+            System.out.println("Move type " + moveType + " detected.");
+        }
     }
 
     public void checkIfGameIsWon() {
@@ -85,14 +97,6 @@ public class AI {
 
     public void noMovesFound() {
         //end the game :(
-    }
-
-    public void addCandidatesToList(Move move) {
-        movesList.add(move);
-    }
-
-    public void executeBestCandidate() {
-        //Feed it one move somehow
     }
 
     // Search for Aces in number piles and move best candidate to foundation
@@ -127,11 +131,7 @@ public class AI {
 
             }
         }
-        // If there are candidates execute the move with the most downcards.
-        if (!candidates.isEmpty()) {
-            candidateSorter(candidates);
-            // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
-        }
+        addCandidateMoves(candidates,1);
     }
 
     // Search for Deuces in number piles and move best candidate to foundation
@@ -170,13 +170,7 @@ public class AI {
                 }
             }
         }
-        // If there are candidates execute the move with the most downcards.
-        if (!candidates.isEmpty()) {
-
-            candidateSorter(candidates);
-
-            // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
-        }
+        addCandidateMoves(candidates,2);
     }
 
     // Search for transferable face-up card(s) that will free a face-down card (the second to last card in pile is face-down)
@@ -220,17 +214,7 @@ public class AI {
                     candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
                 }
             }
-            // If there are candidates execute the move with the most downcards.
-            if (!candidates.isEmpty()) {
-
-                System.out.println("Debug: Free downcards move candidates: " + candidates);
-
-                candidateSorter(candidates);
-
-                System.out.println("Debug: Sorted free downcard move candidates: " + candidates);
-
-                // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
-            }
+            addCandidateMoves(candidates,3);
         }
     }
 
@@ -267,10 +251,9 @@ public class AI {
 
         // If we found clearable decks it can be assued that we also have transferable kings
         if (candidates != null){
-
             // If clearing the deck allows for a legal king move according to our strategy we are happy
             if (clearIsLegal(kings)){
-                // executeBestCandidate(candidates.get(candidates.size()-1)); Uncomment when function parameters are refactored.
+                addCandidateMoves(candidates,4);
             };
         }
     }
@@ -514,13 +497,13 @@ public class AI {
         for (int t = 1; t <= 7; t++) {
             destinationDeck = this.board.getDeck(Integer.toString(t));
 
-            System.out.println("Debug - Checking if " + sourceCard + " can be placed on " + destinationDeck);
+            //System.out.println("Debug - Checking if " + sourceCard + " can be placed on " + destinationDeck);
 
             if (board.canMoveToNumberPile(sourceDeck, destinationDeck, index)) {
 
                 candidates.add((new Move(sourceDeck, destinationDeck, index)));
 
-                System.out.println("Debug - " + sourceDeck.get(index) + "can be placed on " + destinationDeck + "; move added to candidates: " + candidates);
+                //System.out.println("Debug - " + sourceDeck.get(index) + "can be placed on " + destinationDeck + "; move added to candidates: " + candidates);
             }
         }
         // Check if top-card can be placed on Ace stack
@@ -533,12 +516,12 @@ public class AI {
             default -> destinationDeck = board.initialDeck;
         }
 
-        System.out.println("Debug - Checking if" + sourceCard + "can be placed on foundation: " + destinationDeck);
+        //System.out.println("Debug - Checking if" + sourceCard + "can be placed on foundation: " + destinationDeck);
 
         if (board.canMoveToFoundation(sourceDeck, destinationDeck, index)) {
             candidates.add((new Move(sourceDeck, destinationDeck, index)));
 
-            System.out.println("Debug - Deuce to foundation move added to candidates: " + candidates);
+            //System.out.println("Debug - Deuce to foundation move added to candidates: " + candidates);
 
         }
         return candidates;

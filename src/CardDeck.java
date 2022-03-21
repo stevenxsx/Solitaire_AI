@@ -122,11 +122,11 @@ public class CardDeck {
         for (Card card : this.cards){
             if(!card.isFaceUp()){
 
-                System.out.printf("Debug - " + card + " is face down");
+                //System.out.println("Debug - " + card + " is face down");
 
                 number++;
 
-                System.out.println("Debug - Number of face down cards is " +number);
+                //System.out.println("Debug - Number of face down cards is " +number);
             }
         }
         return number;
@@ -136,6 +136,10 @@ public class CardDeck {
     // Author: Simon
     public ArrayList<Card> getCards(){
         return this.cards;
+    }
+
+    public void clearDeck() {
+        cards.clear();
     }
 
     // Returns a sublist of all the faceup cards in the deck
