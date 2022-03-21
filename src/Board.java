@@ -169,15 +169,8 @@ public class Board {
     }
 
     public boolean areFaceUp(CardDeck source, CardDeck destination, int index) {
-        if (destination.size() == 0) {
-            if (source.get(index).isFaceUp()) {
-                return true;
-            }
-            else if (!source.get(index).isFaceUp()) {
-                return false;
-            }
-        }
-        if (source.get(index).isFaceUp() && destination.get(destination.size() - 1).isFaceUp()) {
+
+        if (source.get(index).isFaceUp()) {
             return true;
         } else {
             System.out.println("Attempted to move a face-down card.");
