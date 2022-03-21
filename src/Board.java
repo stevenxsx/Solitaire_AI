@@ -97,6 +97,16 @@ public class Board {
             drawCard(drawDeck,drawDiscard);
         }
     }
+    /** Author STEVEN
+     Moves a card given by an index from anywhere in the draw pile to the top of the discard pile naturally
+     */
+    public void emptyDiscardPile() {
+        for (int i = 0; i < drawDiscard.size()-1; i++) {
+            drawDiscard.get(i).setFaceUp(false);
+            drawDeck.add(drawDiscard.get(i));
+            drawDiscard.remove(i);
+        }
+    }
 
     /** Author STEVEN
      * Given a move object, checks the source & destination piles and attempts to move it there.
