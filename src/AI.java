@@ -120,7 +120,7 @@ public class AI {
                     case SPADES -> destinationDeck = board.spadesPile;
                     case DIAMONDS -> destinationDeck = board.diamondsPile;
                     case CLUBS -> destinationDeck = board.clubsPile;
-                    default -> destinationDeck = new CardDeck();
+                    default -> destinationDeck = board.initialDeck;
                 }
 
                 candidates.add((new Move(sourceDeck, destinationDeck, sourceTopCardIndex)));
@@ -213,7 +213,7 @@ public class AI {
                     case SPADES -> destinationDeck = this.board.spadesPile;
                     case DIAMONDS -> destinationDeck = this.board.diamondsPile;
                     case CLUBS -> destinationDeck = this.board.clubsPile;
-                    default -> destinationDeck = new CardDeck();
+                    default -> destinationDeck = board.initialDeck;
                 }
 
                 if (board.canMoveToFoundation(sourceDeck, destinationDeck, sourceTopCardIndex)) {
@@ -282,7 +282,7 @@ public class AI {
         /*
         //        EITHER a top card or a group of cards that can be transfered to make a pile smooth
 
-        
+
         // Initialize list of candidate card.
         ArrayList<Move> candidates = new ArrayList<>();
         // Scan number piles
@@ -304,7 +304,7 @@ public class AI {
                         destinationDeck = this.board.getDeck(Integer.toString(j));
                         int destTopCardIndex = destinationDeck.getBottomFaceCardIndex();
                         Card destTopCard = destinationDeck.get(destTopCardIndex);
-                        //card before the top card 
+                        //card before the top card
                         Card predestTopCard = destinationDeck.get(destTopCardIndex-1);
 
                         if (board.canMoveToNumberPile(sourceDeck, destinationDeck, sourceTopCardIndex)) {
@@ -314,7 +314,7 @@ public class AI {
                         }
                 }
             }
-        }      
+        }
         */
     }
 
@@ -498,7 +498,7 @@ public class AI {
             case SPADES -> destinationDeck = this.board.spadesPile;
             case DIAMONDS -> destinationDeck = this.board.diamondsPile;
             case CLUBS -> destinationDeck = this.board.clubsPile;
-            default -> destinationDeck = new CardDeck();
+            default -> destinationDeck = board.initialDeck;
         }
 
         System.out.println("Debug - Checking if" + sourceCard + "can be placed on foundation: " + destinationDeck);
