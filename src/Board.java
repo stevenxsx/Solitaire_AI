@@ -40,10 +40,6 @@ public class Board {
 
     }
 
-    private void drawCardMove() {
-
-    }
-
     //Flips newly revealed cards to face-up.
     public void updateBoardState() {
         for (int i = 1; i < 8; i++) {
@@ -82,10 +78,7 @@ public class Board {
         }
         //Attempts to move card from Draw to Discard
         else if (isDrawPile(s) && isDiscardPile(d)) {
-            if (s.size() - 1 == x) {
-                moveCardDeckToDeck(s, d, x, true);
-                return true;
-            }
+            drawCard(s,d,x);
         }
         //Attempts to move card from Discard to Number pile
         else if (isDiscardPile(s) && isNumberPile(d)) {
@@ -187,16 +180,17 @@ public class Board {
         }
     }
 
-    public void moveDeckToDiscard(CardDeck source, CardDeck destination, int index) {
+    public void drawCard(CardDeck source, CardDeck destination, int index) {
         int n = destination.size()-1;
         if ( source.size() == 0 ){
             while(destination.size() != 0){
 
                 source.add(destination.get(n));
+                source.get(source.size()-1).setFaceUp(false);
                 destination.remove(n);
                 n--;
             }
-            moveDeckToDiscard(source, destination, index);
+            drawCard(source, destination, index);
 
         }
         else{
