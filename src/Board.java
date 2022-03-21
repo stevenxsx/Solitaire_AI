@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class Board {
@@ -188,15 +187,17 @@ public class Board {
         }
     }
 
-    public void FromDeckToDiscard(CardDeck source, CardDeck destination, int index) {
-        int n = 1;
+    public void moveDeckToDiscard(CardDeck source, CardDeck destination, int index) {
+        int n = destination.size()-1;
         if ( source.size() == 0 ){
             while(destination.size() != 0){
 
                 source.add(destination.get(n));
                 destination.remove(n);
-                n++;
+                n--;
             }
+            moveDeckToDiscard(source, destination, index);
+
         }
         else{
             destination.add(source.get(index));
