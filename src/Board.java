@@ -25,7 +25,7 @@ public class Board {
         switch (input) {
             case "goodbye": {return;}
             case "shuffle": {drawDeck.shuffleDeck();break;}
-            case "draw": {drawCardMove();break;}
+            case "draw": {attemptMove(new Move(drawDeck,drawDiscard, drawDeck.size()-1));break;}
             default: {StringTokenizer st = new StringTokenizer(input," ");
                 String s = st.nextToken();
                 String d = st.nextToken();
@@ -79,6 +79,7 @@ public class Board {
         //Attempts to move card from Draw to Discard
         else if (isDrawPile(s) && isDiscardPile(d)) {
             drawCard(s,d,x);
+            return true;
         }
         //Attempts to move card from Discard to Number pile
         else if (isDiscardPile(s) && isNumberPile(d)) {
@@ -190,7 +191,7 @@ public class Board {
                 destination.remove(n);
                 n--;
             }
-            drawCard(source, destination, index);
+            drawCard(source, destination, source.size()-1);
 
         }
         else{
