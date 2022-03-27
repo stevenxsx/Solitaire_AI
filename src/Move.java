@@ -1,3 +1,7 @@
+/** Author STEVEN
+ *  Move object that contains a source deck, destination deck, and index of the source deck to feed to the actual
+ *  move algorithm
+ */
 public class Move {
     private CardDeck sourceDeck;
     private CardDeck destinationDeck;
@@ -31,5 +35,9 @@ public class Move {
 
     public int getIndex() {
         return index;
+    }
+
+    public String toString() {
+        return "S: " + sourceDeck + " D: " + destinationDeck + " I: " + index;
     }
 }

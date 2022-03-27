@@ -1,23 +1,37 @@
-import Exceptions.NotEnoughCardsException;
+import java.util.Objects;
+import java.util.Scanner;
 
-import java.util.ArrayList;
-
+/** Author STEVEN
+ *  Creates a game object that is responsible for the general game loop (taking input/calling the AI). Terminates
+ *  when given the right command or the game is won/lost.
+ */
 public class Game {
 
 
     public void startGame() throws Exception {
         Board board = new Board();
-        AI ai = new AI(board);
         board.initialDeck.populate();
         board.initialDeck.shuffleDeck();
         board.initialPopulateBoard();
-        board.printBoard();
+        //board.printBoard();
+
+        Scanner sc = new Scanner(System.in);
+        String input;
+        do {
+            board.updateBoardState();
+            board.printBoard();
+            //System.out.println(board.getDeck("draw"));
+            //System.out.println(board.getDeck("discard"));
+            System.out.println("Ready for Input");
+            input = sc.nextLine();
+            board.parseInput(input);
+        } while (!Objects.equals(input, "goodbye"));
         /*do {
-            ai.executeTurn();
-            if (ai.gameIsWon) {
+            board.executeAI();
+            if (board.ai.gameIsWon) {
                 winGame();
             }
-        } while (!ai.gameIsLost);*/
+        } while (!board.ai.gameIsLost);*/
 
     }
 

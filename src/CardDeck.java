@@ -7,9 +7,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+/** Author STEVEN
+ * CardDeck object that holds Card objects. Lots of methods for indirect manipulation of the underlying ArrayList as
+ * well as various printing, parsing, etc.
+ */
 public class CardDeck {
 
     private final ArrayList<Card> cards = new ArrayList<>(52);
+    private final String name;
+
+    public CardDeck(String name) {
+        this.name = name;
+    }
 
     public void populate() throws IOException {
         File file = new File("./resources/cards.txt");
@@ -63,9 +72,9 @@ public class CardDeck {
         }
     }
 
-    public String toString(String deckName) {
+    public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(deckName).append(" includes the following:\n");
+        s.append(name).append(" includes the following:\n");
         for (Card card : cards) {
             s.append(card.toString()).append(" - Face Up -> ").append(card.isFaceUp()).append("\n");
         }
@@ -116,7 +125,12 @@ public class CardDeck {
         int number = 0;
         for (Card card : this.cards){
             if(!card.isFaceUp()){
+
+                //System.out.println("Debug - " + card + " is face down");
+
                 number++;
+
+                //System.out.println("Debug - Number of face down cards is " +number);
             }
         }
         return number;
@@ -126,6 +140,10 @@ public class CardDeck {
     // Author: Simon
     public ArrayList<Card> getCards(){
         return this.cards;
+    }
+
+    public void clearDeck() {
+        cards.clear();
     }
 
     // Returns a sublist of all the faceup cards in the deck
@@ -146,6 +164,17 @@ public class CardDeck {
     // Call this function to check if popping the topcard will free a downcard
     // Author: SIMON
     public boolean canFreeDownCard(){
-        return !this.cards.get(getBottomFaceCardIndex()-1).isFaceUp();
+
+        return !(getNumberOfFaceDownCards() == 0);
+    }
+
+    public ArrayList<Card> getAllCardsOfValue(int cardValue){
+        ArrayList<Card> cards = new ArrayList<>();
+        for(Card card : this.cards){
+            if(card.getValue() == cardValue){
+                cards.add(card);
+            }
+        }
+        return cards;
     }
 }
